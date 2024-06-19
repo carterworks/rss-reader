@@ -51,7 +51,8 @@ details,
   color: #aaa;
 }
 
-.article-timestamp {
+.article-timestamp,
+.feed-url {
   font-size: 0.75em;
 }
 
