@@ -22,7 +22,7 @@
     </summary>
     <ul>
       {% for item in feed.items %}
-      <li>
+      <li class="{% if item.isRecent %}has-recent{% endif %}">
         <div><a class="article-title" href="{{ item.link }}" target="_blank" rel="noopener norefferer nofollow">{{
             item.title }}</a>
           <div class="article-timestamp">{{ item.timestamp | formatDate }}, {{ item.timestamp | formatTime }}</div>

@@ -1,7 +1,8 @@
 :root {
   --color-bg: oklch(97.1% 0.024 88.23);
-  --color-hover: oklch(94.48% 0.041 88.79);
-  --color-text: oklch(21.03% 0.006 285.89);
+  --color-hover: oklch(94.48% 0.024 88.23);
+  --color-text: oklch(24.74% 0.024 88.23);
+  --color-new: oklch(94.48% 0.024 38.23);
 }
 
 body {
@@ -19,12 +20,21 @@ summary,
 details li {
   padding: 0.5em;
   border-radius: 12px;
+  margin-block-start: 4px;
   transition: background cubic-bezier(0.39, 0.575, 0.565, 1) 0.2s;
 }
 
 summary:hover,
 details li:hover {
   background: var(--color-hover)
+}
+
+details:has(li.has-recent) {
+
+  summary,
+  li.has-recent {
+    background: var(--color-new);
+  }
 }
 
 .feed-url {
