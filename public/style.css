@@ -16,17 +16,26 @@ summary {
 }
 
 summary,
-li {
+details li {
   padding: 0.5em;
   border-radius: 12px;
   transition: background cubic-bezier(0.39, 0.575, 0.565, 1) 0.2s;
 }
 
 summary:hover,
-li:hover {
+details li:hover {
   background: var(--color-hover)
 }
 
 .feed-url {
   color: #aaa;
+}
+
+.article-timestamp {
+  font-size: 0.75em;
+}
+
+details ul {
+  list-style-type: none;
+  margin: 0;
 }

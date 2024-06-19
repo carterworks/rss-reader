@@ -23,8 +23,9 @@
     <ul>
       {% for item in feed.items %}
       <li>
-        {{ item.timestamp | formatDate }} @ {{ item.timestamp | formatTime }}—
-        <a href="{{ item.link }}" target="_blank" rel="noopener norefferer nofollow">{{ item.title }}</a>
+        <div><a class="article-title" href="{{ item.link }}" target="_blank" rel="noopener norefferer nofollow">{{
+            item.title }}</a>
+          <div class="article-timestamp">{{ item.timestamp | formatDate }}, {{ item.timestamp | formatTime }}</div>
       </li>
       {% endfor %}
     </ul>
