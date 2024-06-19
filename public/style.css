@@ -1,26 +1,30 @@
+:root {
+  --color-bg: oklch(97.1% 0.024 88.23);
+  --color-hover: oklch(94.48% 0.041 88.79);
+  --color-text: oklch(21.03% 0.006 285.89);
+}
+
 body {
   font-family: system-ui;
   font-size: 18px;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
-
-
-
-details:focus,
-details:focus-within,
-details:hover {
-  /* background:#ffeb3b; */
-  /* outline:2px #000 solid; */
-}
-
-
-details ul li {}
 
 summary {
   cursor: pointer;
 }
 
-summary:hover {
-  opacity: .75;
+summary,
+li {
+  padding: 0.5em;
+  border-radius: 12px;
+  transition: background cubic-bezier(0.39, 0.575, 0.565, 1) 0.2s;
+}
+
+summary:hover,
+li:hover {
+  background: var(--color-hover)
 }
 
 .feed-url {
