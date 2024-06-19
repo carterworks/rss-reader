@@ -35,7 +35,7 @@
   {% endfor %} {% endfor %} {% if errors | length > 0 %}
   <h2>Errors</h2>
   <p>There were errors trying to parse these feeds:</p>
-  <ul>
+  <ul class="errors">
     {% for error in errors %}
     <li>{{ error }}</li>
     {% endfor %}

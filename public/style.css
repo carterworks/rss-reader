@@ -12,6 +12,11 @@ body {
   color: var(--color-text);
 }
 
+.inline-icon {
+  height: 1em;
+  vertical-align: text-bottom;
+}
+
 summary {
   cursor: pointer;
 }
@@ -35,6 +40,11 @@ details:has(li.has-recent) {
   li.has-recent {
     background: var(--color-new);
   }
+}
+
+details,
+.errors li {
+  word-break: break-all;
 }
 
 .feed-url {
