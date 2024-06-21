@@ -15,9 +15,7 @@ import type { Feeds, JSONValue } from "./@types/bubo";
  */
 env.addFilter("relative", (dateString): string => {
 	const date: Date = new Date(Number.parseInt(dateString));
-	return !Number.isNaN(date.getTime())
-		? getRelativeTime(date)
-		: dateString;
+	return !Number.isNaN(date.getTime()) ? getRelativeTime(date) : dateString;
 });
 
 env.addFilter("formatTime", (dateString): string => {

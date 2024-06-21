@@ -117,7 +117,7 @@
           <li class="{% if item.isRecent %}has-recent{% endif %}">
             <div>
               <a class="article-title" href="{{ item.link }}" target="_blank" rel="noopener norefferer nofollow">{{
-                item.title }}</a>
+                item.title | safe}}</a>
             </div>
             <div class="article-timestamp">
               <relative-time data-time="{{item.timestamp}}">{{ item.timestamp | relative}}</relative-time>
@@ -129,16 +129,16 @@
       {% endfor %}
     </section>
     {% endfor %}
-    {% if errors | length > 0 %}
-    <h2>Errors</h2>
-    <p>There were errors trying to parse these feeds:</p>
-    <ul class="errors">
-      {% for error in errors %}
-      <li>{{ error }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
   </main>
+  {% if errors | length > 0 %}
+  <h2>Errors</h2>
+  <p>There were errors trying to parse these feeds:</p>
+  <ul class="errors">
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
   <footer>
     <hr>
     <p>Last updated {{ now }}.</p>

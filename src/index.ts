@@ -72,9 +72,20 @@ const finishBuild: () => void = async () => {
 
 	process.stdout.write("\nDone fetching everything!\n");
 
+	// sort all the categories and the feeds alphabetically
+	const sortedFeeds: Feeds = {};
+	const sortedKeys = Object.keys(contentFromAllFeeds).sort((a, b) =>
+		a.localeCompare(b),
+	);
+	for (const key of sortedKeys) {
+		sortedFeeds[key] = contentFromAllFeeds[key].sort((a, b) =>
+			a.title.localeCompare(b.title),
+		);
+	}
+
 	// generate the static HTML output from our template renderer
 	const output = render({
-		data: contentFromAllFeeds,
+		data: sortedFeeds,
 		errors: errors,
 		info: buboInfo,
 	});
