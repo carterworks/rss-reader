@@ -30,6 +30,7 @@ section ul {
 
 summary {
   cursor: pointer;
+  text-overflow: ellipsis;
 }
 
 summary,
@@ -53,13 +54,18 @@ details:has(li.has-recent) {
   }
 }
 
-details,
+
 .errors li {
   word-break: break-all;
 }
 
 .feed-url {
   color: #aaa;
+  white-space: nowrap;
+  display: inline-block;
+  text-overflow: ellipsis;
+  width: 100%;
+  overflow: hidden;
 }
 
 .article-timestamp,
