@@ -18,6 +18,7 @@ import Parser from "rss-parser";
 import type { FeedItem, Feeds } from "./@types/bubo";
 import { render } from "./renderer.js";
 import {
+	buildCSS,
 	getBuboInfo,
 	getFeedList,
 	getLink,
@@ -25,6 +26,11 @@ import {
 	getTitle,
 	parseFeed,
 } from "./utilities.js";
+
+const cssInput = "./public/styles.input.css";
+const cssOutput = "./public/styles.css";
+const minifyCss = process.env.NODE_ENV === "production";
+await buildCSS(minifyCss, cssInput, cssOutput);
 
 const buboInfo = await getBuboInfo();
 const parser = new Parser();
@@ -90,7 +96,7 @@ const finishBuild: () => void = async () => {
 		data: sortedFeeds,
 		errors: errors,
 		info: buboInfo,
-		yazzyUrl
+		yazzyUrl,
 	});
 
 	// write the output to public/index.html

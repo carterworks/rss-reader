@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --color-bg: oklch(97.1% 0.024 88.23);
   --color-hover: oklch(94.48% 0.024 88.23);
@@ -6,7 +10,6 @@
 }
 
 body {
-  font-family: system-ui;
   font-size: 18px;
   background: var(--color-bg);
   color: var(--color-text);
