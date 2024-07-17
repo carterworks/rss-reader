@@ -101,5 +101,6 @@ export const buildCSS = async (
 		const err = new TextDecoder().decode(output.stderr);
 		throw new Error(`Building tailwind failed: ${err}`);
 	}
+	console.log(`Successfully built CSS to ${destination}`);
 	return;
 };
