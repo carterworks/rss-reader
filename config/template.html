@@ -119,21 +119,21 @@
         </summary>
         <ul class="max-h-64 overflow-y-auto list-none m-0">
           {% for item in feed.items %}
-          <li class="{% if item.isRecent %}has-recent border-2 border-arc-title{% endif %} flex flex-row items-center p-2 rounded-xl mt-1 transition-colors hover:bg-arc-hover">
+          <li class="{% if item.isRecent %}has-recent {% endif %} flex flex-row items-center p-2 rounded-xl mt-1 transition-colors hover:bg-arc-hover">
             {% if item.isRecent %}
             <div class="text-xl mr-2" aria-label="Item is recent">✳︎</div>
             {% endif %}
             <div>
               <div>
-                <a class="article-title" href="{{ item.link }}" target="_blank" rel="noopener norefferer nofollow">{{
+                <a class="no-underline hover:text-inherit" href="{{ item.link }}" target="_blank" rel="noopener norefferer nofollow">{{
                   item.title | safe}}</a>
               </div>
               <div class="text-sm text-arc-subtitle">
-                <relative-time data-time="{{item.timestamp}}">{{ item.timestamp | relative}}</relative-time>
+                <relative-time data-time="{{item.timestamp}}">{{ item.timestamp | formatDateTime}}</relative-time>
               </div>
               {% if yazzyUrl %}
               <div class="text-sm text-arc-subtitle">
-                <a href="{{ yazzyUrl }}/{{ item.link }}" target="_blank" rel="noreferrer noopener">yazzy</a>
+                <a href="{{ yazzyUrl }}/{{ item.link }}"  target="_blank" rel="noreferrer noopener">yazzy</a>
               </div>
               {% endif %}
             </div>
@@ -156,7 +156,7 @@
   {% endif %}
   <footer>
     <hr>
-    <p>Last updated <relative-time data-time="{{ now }}">{{ now | relative}}</relative-time>.</p>
+    <p>Last updated <relative-time data-time="{{ now }}">{{ now | formatDateTime}}</relative-time>.</p>
     <p>
       <a href="https://github.com/carterworks/rss-reader">View on GitHub</a>
     </p>

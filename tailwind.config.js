@@ -1,3 +1,4 @@
+const plugin = require("tailwindcss/plugin");
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ["./config/*.html"],
@@ -233,5 +234,18 @@ export default {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [
+		plugin(({ addBase, theme }) => {
+			addBase({
+				a: {
+					textDecoration: "underline",
+					transition: "color 0.2s",
+					cursor: "pointer",
+					"&:hover": {
+						color: theme("colors.arc.subtitle"),
+					},
+				},
+			});
+		}),
+	],
 };
