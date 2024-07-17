@@ -146,7 +146,7 @@ const processFeed =
 				item.link = getLink(item);
 				const timestamp = new Date(Number.parseInt(item.timestamp));
 				const eightHoursAgo = new Date();
-				eightHoursAgo.setHours(eightHoursAgo.getHours() - 8);
+				eightHoursAgo.setHours(eightHoursAgo.getHours() - 24);
 				item.isRecent = timestamp > eightHoursAgo;
 			}
 
