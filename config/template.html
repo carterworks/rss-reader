@@ -112,9 +112,9 @@
           {% if feed.hasRecent %}
           <div class="text-xl mr-2" aria-label="Feed has recent items">✳︎</div>
           {% endif %}
-          <div>
+          <div class="w-full">
             <div>{{ feed.title }}</div>
-            <div class="text-sm text-arc- whitespace-nowrap text-ellipsis w-5/6 overflow-hidden text-arc-subtitle" title="{{feed.feed}}">({{ feed.feed }})</div>
+            <div class="text-sm whitespace-nowrap text-ellipsis w-11/12 overflow-hidden text-arc-subtitle" title="{{feed.feed}}">({{ feed.feed }})</div>
           </div>
         </summary>
         <ul class="max-h-64 overflow-y-auto list-none m-0">
