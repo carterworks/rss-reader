@@ -76,11 +76,18 @@ export async function parseFeed(response: Response): Promise<JSONValue> {
 	return (rssFeed && rssFeed) || (jsonFeed && jsonFeed) || {};
 }
 
-export const getFeedList = async (): Promise<JSONValue> => {
+export const getFeedList = async ({
+	feedFilePath,
+	feeds,
+}: { feedFilePath?: string; feeds?: string }): Promise<JSONValue> => {
+	if (feeds) {
+		return JSON.parse(feeds);
+	}
+	if (!feedFilePath) {
+		throw new Error("No feed list provided");
+	}
 	return JSON.parse(
-		(
-			await readFile(new URL("../config/feeds.json", import.meta.url))
-		).toString(),
+		(await readFile(new URL(feedFilePath, import.meta.url))).toString(),
 	);
 };
 

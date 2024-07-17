@@ -34,7 +34,14 @@ await buildCSS(minifyCss, cssInput, cssOutput);
 
 const buboInfo = await getBuboInfo();
 const parser = new Parser();
-const feedList = await getFeedList();
+const feedOptions: Parameters<typeof getFeedList>[0] = {
+	feeds: process.env.FEEDS,
+	feedFilePath: process.env.FEEDS
+		? ""
+		: process.env.FEED_FILE ?? "../config/feeds.json",
+};
+console.log("feedOptions", JSON.stringify(feedOptions, null, 2));
+const feedList = await getFeedList(feedOptions);
 const feedListLength =
 	Object.entries(feedList).flat(2).length - Object.keys(feedList).length;
 

@@ -3,3 +3,4 @@ public/index.html
 public/styles.css
 dist/*
 .DS_Store
+configs/feeds.json
