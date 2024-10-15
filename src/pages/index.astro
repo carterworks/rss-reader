@@ -136,6 +136,7 @@ const categoriesSelectorCss = categories
 			type="image/svg+xml"
 		/>
 		<link rel="manifest" href="/rss-reader/manifest.json" />
+		<script src="/rss-reader/relative-datetime.js" is:inline></script>
 		<style set:html={categoriesSelectorCss}></style>
 	</head>
 	<body
@@ -230,7 +231,7 @@ const categoriesSelectorCss = categories
 								class="underline block break-words"
 							/>
 							<div class="no-underline text-sm font-normal">
-								<span>{new Date(item.pubIsoDate).toDateString()}</span>
+								<time is="relative-datetime" datetime={(new Date(item.pubIsoDate)).toISOString()}>{(new Date(item.pubIsoDate)).toLocaleString()}</time>
 								<span>|</span>
 								<span>{item.feedName}</span>
 								<span>|</span>
