@@ -20,6 +20,7 @@ async function parseFeedContents(
 	feedUrl: string,
 	category: string,
 ): Promise<FeedItem[]> {
+	const start = performance.now();
 	console.log(`Fetching: ${feedUrl}...`);
 	let items: FeedItem[] = [];
 	try {
@@ -38,6 +39,8 @@ async function parseFeedContents(
 	} catch (err) {
 		console.error(`${feedUrl}\n${err}`);
 		throw err;
+	} finally {
+		console.log(`Fetched: ${feedUrl} in ${(performance.now() - start) / 1000}s`);
 	}
 	return items;
 }
