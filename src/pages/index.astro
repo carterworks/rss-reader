@@ -235,6 +235,9 @@ const categoriesSelectorCss = categories
 								<span>{item.feedName}</span>
 								<span>|</span>
 								<span>{item.category}</span>
+								<span>|</span>
+								<a href={`https://archive.is/${item.link}`} class="underline" target="_blank"
+											rel="noopener noreferrer">archive.is</a>
 								{Boolean(yazzyUrl) ? (
 									<>
 										<span>|</span>
