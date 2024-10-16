@@ -1,36 +1,48 @@
 /**
- * @example {<formatted-datetime datetime="2021-01-01T00:23:00Z"></formatted-datetime>} displays as "37 minutes ago" or
+ * @example {<relative-time datetime="2021-01-01T00:23:00Z"></relative-time>} displays as "37 minutes ago" or
  * "2 days ago" in the user's locale, etc.
  */
-class RelativeDatetime extends HTMLTimeElement {
+class RelativeTime extends HTMLElement {
+	static rtf = new Intl.RelativeTimeFormat();
 	#updateIntervalId;
+
 	connectedCallback() {
 		const datetime = this.getAttribute("datetime");
-
 		if (!datetime) {
 			return;
 		}
-		this.setAttribute("title", new Date(datetime).toLocaleString());
-		// based on how long ago it was, update every minute, hour, day, etc.
-		const updateInterval = RelativeDatetime.determineUpdateInterval(
-			new Date(datetime),
-		);
-		this.textContent = RelativeDatetime.getTimeAgo(new Date(datetime));
-		this.#updateIntervalId = setInterval(() => {
-			this.textContent = RelativeDatetime.getTimeAgo(
-				new Date(this.getAttribute("datetime")),
-			);
-		}, updateInterval);
+		// need to wait for the inner text to render before removing it.
+		window.requestAnimationFrame(() => {
+			this.update(datetime);
+		});
 	}
 
 	disconnectedCallback() {
 		clearInterval(this.#updateIntervalId);
 	}
 
+	observedAttribues = ["datetime"];
 	attributeChangedCallback(name, oldValue, newValue) {
-		if (name === "datetime" && oldValue !== newValue) {
-			this.textContent = RelativeDatetime.getTimeAgo(new Date(newValue));
+		if (!this.observedAttribues.includes(name) || oldValue === newValue) {
+			return;
 		}
+		this.update(newValue);
+	}
+
+	update(newValue) {
+		this.textContent = RelativeTime.getTimeAgo(new Date(newValue));
+		this.setAttribute("title", new Date(newValue).toLocaleString());
+		if (this.#updateIntervalId) {
+			clearInterval(this.#updateIntervalId);
+		}
+		const updateInterval = RelativeTime.determineUpdateInterval(
+			new Date(newValue),
+		);
+		this.#updateIntervalId = setInterval(() => {
+			this.textContent = RelativeTime.getTimeAgo(
+				new Date(this.getAttribute("datetime")),
+			);
+		}, updateInterval);
 	}
 
 	/**
@@ -64,27 +76,23 @@ class RelativeDatetime extends HTMLTimeElement {
 		const now = new Date();
 		const diffInSeconds = Math.floor((now - date) / 1000);
 
-		const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
-
 		if (diffInSeconds < 60) {
-			return rtf.format(-diffInSeconds, "second");
+			return RelativeTime.rtf.format(-diffInSeconds, "second");
 		}
 
 		const diffInMinutes = Math.floor(diffInSeconds / 60);
 		if (diffInMinutes < 60) {
-			return rtf.format(-diffInMinutes, "minute");
+			return RelativeTime.rtf.format(-diffInMinutes, "minute");
 		}
 
 		const diffInHours = Math.floor(diffInMinutes / 60);
 		if (diffInHours < 24) {
-			return rtf.format(-diffInHours, "hour");
+			return RelativeTime.rtf.format(-diffInHours, "hour");
 		}
 
 		const diffInDays = Math.floor(diffInHours / 24);
-		return rtf.format(-diffInDays, "day");
+		return RelativeTime.rtf.format(-diffInDays, "day");
 	}
 }
 
-customElements.define("relative-datetime", RelativeDatetime, {
-	extends: "time",
-});
+customElements.define("relative-time", RelativeTime);
