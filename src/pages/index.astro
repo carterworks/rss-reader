@@ -136,7 +136,9 @@ const categoriesSelectorCss = categories
 			type="image/svg+xml"
 		/>
 		<link rel="manifest" href="/rss-reader/manifest.json" />
-		<script type="module" src="/node_modules/@github/relative-time-element/dist/index.js"></script>
+		<script>
+			import "@github/relative-time-element";
+		</script>
 		<style set:html={categoriesSelectorCss}></style>
 	</head>
 	<body
