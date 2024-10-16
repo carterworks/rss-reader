@@ -16,12 +16,6 @@ const feedItems = await getAllFeedItems();
 const parseTime = performance.now() - start;
 const updateTime = new Date();
 
-feedItems.errors = [
-	...feedItems.errors,
-	...feedItems.contents
-		.map((item) => new Error(`No title for ${item.link}`)),
-]
-
 const categories = [
 	STATIC_CATEGORIES.All,
 	STATIC_CATEGORIES.Recent,
