@@ -197,14 +197,16 @@ body:has(#category-picker #${cssAttribute(STATIC_CATEGORIES.All)}:checked) .${cs
 									]}
 								/>
 								<span class="peer-checked:underline">{category}</span>
-								<span class="ml-auto">{categoryCounts[category]}</span>
+								<span class="ml-auto hidden sm:inline md:hidden lg:inline">
+									{categoryCounts[category]}
+								</span>
 							</label>
 						</li>
 					))
 				}
 			</ul>
 			<footer
-				class="text-sm hidden md:[display: initial] max-h-24 overflow-auto opacity-25 hover:opacity-100 transition-opacity"
+				class="text-sm hidden md:block max-h-24 overflow-auto opacity-25 hover:opacity-100 transition-opacity"
 			>
 				{
 					feedItems.errors.length === 0 ? (
