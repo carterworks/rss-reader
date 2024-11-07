@@ -174,11 +174,11 @@ body:has(#category-picker #${cssAttribute(STATIC_CATEGORIES.All)}:checked) .${cs
 		<nav class="md:flex flex-col justify-between gap-4">
 			<ul
 				id="category-picker"
-				class="flex flex-row flex-wrap md:flex-col gap-2 md:gap-1"
+				class="flex flex-row overflow-x-auto items-center md:items-start md:flex-col gap-2 md:gap-1"
 			>
 				{
 					categories.map((category) => (
-						<li>
+						<li class="w-full">
 							<input
 								type="radio"
 								id={cssAttribute(category)}
