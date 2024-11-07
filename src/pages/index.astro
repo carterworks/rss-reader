@@ -142,11 +142,9 @@ body:has(#category-picker #${cssAttribute(STATIC_CATEGORIES.All)}:checked) .${cs
 		<style set:html={categoriesSelectorCss}></style>
 	</head>
 	<body
-		class="font-system text-base p-4 bg-orange-50 dark:bg-slate-900 dark:text-slate-300 text-stone-700 font-semibold h-screen md:grid"
+		class="font-system text-base p-4 bg-orange-50 dark:bg-slate-900 dark:text-slate-300 text-stone-700 font-semibold h-screen flex flex-col md:grid gap-2 md:gap-4 md:grid-cols-7"
 	>
-		<header
-			class="col-span-12 row-span-1 h-fit mb-4 flex flex-row gap-4 items-center overflow-auto flex-wrap"
-		>
+		<header class="col-span-full flex flex-row gap-x-2 items-center flex-wrap">
 			<h1 class="">Carter's RSS Feeds</h1>
 			<hr class="flex-grow h-px border-0 border-b-2 border-b-stone-500" />
 			<ul class="flex flex-row gap-2">
@@ -173,10 +171,10 @@ body:has(#category-picker #${cssAttribute(STATIC_CATEGORIES.All)}:checked) .${cs
 				</li>
 			</ul>
 		</header>
-		<nav class="md:flex flex-col justify-between">
+		<nav class="md:flex flex-col justify-between gap-4">
 			<ul
 				id="category-picker"
-				class="flex flex-row flex-wrap mb-2 md:flex-col gap-2 md:gap-1 col-span-2 row-span-1 md:mr-4"
+				class="flex flex-row flex-wrap md:flex-col gap-2 md:gap-1"
 			>
 				{
 					categories.map((category) => (
@@ -189,7 +187,7 @@ body:has(#category-picker #${cssAttribute(STATIC_CATEGORIES.All)}:checked) .${cs
 								checked={category === STATIC_CATEGORIES.Recent}
 							/>
 							<label
-								class="cursor-pointer transition-all opacity-25 peer-checked:opacity-100 hover:opacity-100 flex flex-row gap-2 items-center"
+								class="cursor-pointer gap-2 items-center transition-all opacity-25 peer-checked:opacity-100 hover:opacity-100 flex flex-row"
 								for={cssAttribute(category)}
 							>
 								<div
@@ -206,22 +204,22 @@ body:has(#category-picker #${cssAttribute(STATIC_CATEGORIES.All)}:checked) .${cs
 				}
 			</ul>
 			<footer
-				class="mt-4 md:mr-4 md:mt-0 text-sm row-end-13 row-span-1 col-span-2 overflow-auto max-h-20 opacity-25 hover:opacity-100 transition-opacity"
+				class="text-sm hidden md:[display: initial] max-h-24 overflow-auto opacity-25 hover:opacity-100 transition-opacity"
 			>
 				{
 					feedItems.errors.length === 0 ? (
-						<>No errors</>
+						"No errors 🤩"
 					) : (
 						<ul>
 							{feedItems.errors.map((error) => (
-								<li class="break-words mb-2">{error}</li>
+								<li class="mb-2">{error}</li>
 							))}
 						</ul>
 					)
 				}
 			</footer>
 		</nav>
-		<main class="overflow-y-auto col-span-11">
+		<main class="overflow-y-auto md:col-start-2 md:-col-end-1">
 			<ul class="flex flex-col gap-2">
 				{
 					feedItems.contents.map((item) => (
