@@ -27,10 +27,10 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"@astrojs/tailwind": "^5.1.0",
+		"@astrojs/tailwind": "5.1.2",
 		"@extractus/feed-extractor": "^7.1.3",
 		"@github/relative-time-element": "^4.4.3",
-		"astro": "4.15.6"
+		"astro": "4.16.10"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.1",
