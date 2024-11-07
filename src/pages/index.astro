@@ -106,18 +106,18 @@ const categoryColors = categories.reduce((acc, category) => {
 	return acc;
 }, {});
 
-const categoriesSelectorCss = categories
+let categoriesSelectorCss = categories
 	.filter((c) => c !== STATIC_CATEGORIES.All)
 	.map(
 		(c) => `
-#category-picker:has(#${cssAttribute(c)}:checked) ~ main ul {
-	> .${cssAttribute(c)}-item {
-		display: block;
-	}
-	> *:not(.${cssAttribute(c)}-item) {
-		display: none;
-	}
-}`,
+.${cssAttribute(c)}-item {
+	display: none;
+}
+body:has(#category-picker #${cssAttribute(c)}:checked) .${cssAttribute(c)}-item,
+body:has(#category-picker #${cssAttribute(STATIC_CATEGORIES.All)}:checked) .${cssAttribute(c)}-item {
+	display: block;
+}
+`,
 	)
 	.join("\n");
 ---
@@ -142,7 +142,7 @@ const categoriesSelectorCss = categories
 		<style set:html={categoriesSelectorCss}></style>
 	</head>
 	<body
-		class="font-system text-base md:grid grid-cols-12 auto-rows-min p-4 bg-orange-50 dark:bg-slate-900 dark:text-slate-300 text-stone-700 font-semibold"
+		class="font-system text-base p-4 bg-orange-50 dark:bg-slate-900 dark:text-slate-300 text-stone-700 font-semibold h-screen md:grid"
 	>
 		<header
 			class="col-span-12 row-span-1 h-fit mb-4 flex flex-row gap-4 items-center overflow-auto flex-wrap"
@@ -159,7 +159,9 @@ const categoriesSelectorCss = categories
 					Took {(parseTime / 1000).toFixed(0)}s
 				</li>
 				<li>
-					Last updated&nbsp;<relative-time datetime={(updateTime).toISOString()}>{updateTime.toLocaleString()}</relative-time>
+					Last updated&nbsp;<relative-time datetime={updateTime.toISOString()}
+						>{updateTime.toLocaleString()}</relative-time
+					>
 				</li>
 				<li>
 					<a
@@ -171,38 +173,55 @@ const categoriesSelectorCss = categories
 				</li>
 			</ul>
 		</header>
-		<nav
-			id="category-picker"
-			class="flex flex-row flex-wrap mb-2 md:flex-col gap-2 md:gap-1 col-span-2 md:sticky md:top-4 row-span-1 md:mr-4"
-		>
-			{
-				categories.map((category) => (
-					<div>
-						<input
-							type="radio"
-							id={cssAttribute(category)}
-							name="category"
-							class="hidden peer"
-							checked={category === STATIC_CATEGORIES.Recent}
-						/>
-						<label
-							class="cursor-pointer transition-all opacity-25 peer-checked:opacity-100 hover:opacity-100 flex flex-row gap-2 items-center"
-							for={cssAttribute(category)}
-						>
-							<div
-								class:list={[
-									"w-4 h-4 rounded-full",
-									categoryColors[category].bg,
-								]}
+		<nav class="md:flex flex-col justify-between">
+			<ul
+				id="category-picker"
+				class="flex flex-row flex-wrap mb-2 md:flex-col gap-2 md:gap-1 col-span-2 row-span-1 md:mr-4"
+			>
+				{
+					categories.map((category) => (
+						<li>
+							<input
+								type="radio"
+								id={cssAttribute(category)}
+								name="category"
+								class="hidden peer"
+								checked={category === STATIC_CATEGORIES.Recent}
 							/>
-							<span class="peer-checked:underline">{category}</span>
-							<span class="ml-auto">{categoryCounts[category]}</span>
-						</label>
-					</div>
-				))
-			}
+							<label
+								class="cursor-pointer transition-all opacity-25 peer-checked:opacity-100 hover:opacity-100 flex flex-row gap-2 items-center"
+								for={cssAttribute(category)}
+							>
+								<div
+									class:list={[
+										"w-4 h-4 rounded-full",
+										categoryColors[category].bg,
+									]}
+								/>
+								<span class="peer-checked:underline">{category}</span>
+								<span class="ml-auto">{categoryCounts[category]}</span>
+							</label>
+						</li>
+					))
+				}
+			</ul>
+			<footer
+				class="mt-4 md:mr-4 md:mt-0 text-sm row-end-13 row-span-1 col-span-2 overflow-auto max-h-20 opacity-25 hover:opacity-100 transition-opacity"
+			>
+				{
+					feedItems.errors.length === 0 ? (
+						<>No errors</>
+					) : (
+						<ul>
+							{feedItems.errors.map((error) => (
+								<li class="break-words mb-2">{error}</li>
+							))}
+						</ul>
+					)
+				}
+			</footer>
 		</nav>
-		<main class="col-span-10 row-span-11">
+		<main class="overflow-y-auto">
 			<ul class="flex flex-col gap-2">
 				{
 					feedItems.contents.map((item) => (
@@ -233,14 +252,24 @@ const categoriesSelectorCss = categories
 								class="underline block break-words"
 							/>
 							<div class="no-underline text-sm font-normal">
-								<relative-time datetime={(new Date(item.pubIsoDate)).toISOString()}>{(new Date(item.pubIsoDate)).toLocaleString()}</relative-time>
+								<relative-time
+									datetime={new Date(item.pubIsoDate).toISOString()}
+								>
+									{new Date(item.pubIsoDate).toLocaleString()}
+								</relative-time>
 								<span>|</span>
 								<span>{item.feedName}</span>
 								<span>|</span>
 								<span>{item.category}</span>
 								<span>|</span>
-								<a href={`https://archive.is/${item.link}`} class="underline" target="_blank"
-											rel="noopener noreferrer">archive.is</a>
+								<a
+									href={`https://archive.is/${item.link}`}
+									class="underline"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									archive.is
+								</a>
 								{Boolean(yazzyUrl) ? (
 									<>
 										<span>|</span>
@@ -260,20 +289,5 @@ const categoriesSelectorCss = categories
 				}
 			</ul>
 		</main>
-		<footer
-			class="mt-4 md:mr-4 md:mt-0 text-sm row-end-13 row-span-1 col-span-2 overflow-auto max-h-20 opacity-25 hover:opacity-100 transition-opacity"
-		>
-			{
-				feedItems.errors.length === 0 ? (
-					<>No errors</>
-				) : (
-					<ul>
-						{feedItems.errors.map((error) => (
-							<li class="break-words mb-2">{error}</li>
-						))}
-					</ul>
-				)
-			}
-		</footer>
 	</body>
 </html>
