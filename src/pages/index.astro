@@ -106,18 +106,18 @@ const categoryColors = categories.reduce((acc, category) => {
 	return acc;
 }, {});
 
-const categoriesSelectorCss = categories
+let categoriesSelectorCss = categories
 	.filter((c) => c !== STATIC_CATEGORIES.All)
 	.map(
 		(c) => `
-#category-picker:has(#${cssAttribute(c)}:checked) ~ main ul {
-	> .${cssAttribute(c)}-item {
-		display: block;
-	}
-	> *:not(.${cssAttribute(c)}-item) {
-		display: none;
-	}
-}`,
+.${cssAttribute(c)}-item {
+	display: none;
+}
+body:has(#category-picker #${cssAttribute(c)}:checked) .${cssAttribute(c)}-item,
+body:has(#category-picker #${cssAttribute(STATIC_CATEGORIES.All)}:checked) .${cssAttribute(c)}-item {
+	display: block;
+}
+`,
 	)
 	.join("\n");
 ---
