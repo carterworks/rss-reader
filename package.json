@@ -1,8 +1,7 @@
 {
-	"name": "bubo-reader",
+	"name": "rss-reader",
+	"private": true,
 	"version": "2.0.2",
-	"description": "A simple but effective feed reader (RSS, JSON)",
-	"homepage": "https://github.com/georgemandis/bubo-rss",
 	"main": "src/index.ts",
 	"type": "module",
 	"scripts": {
@@ -12,19 +11,6 @@
 		"build": "astro build",
 		"preview": "astro preview",
 		"prepare": "lefthook install"
-	},
-	"author": {
-		"name": "George Mandis",
-		"email": "george@mand.is",
-		"url": "https://george.mand.is"
-	},
-	"funding": {
-		"type": "github",
-		"url": "https://github.com/sponsors/georgemandis"
-	},
-	"bugs": {
-		"url": "https://github.com/georgemandis/bubo-rss/issues",
-		"email": "george+bubo@mand.is"
 	},
 	"license": "MIT",
 	"dependencies": {
