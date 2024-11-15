@@ -250,7 +250,7 @@ body:has(#category-picker #${cssAttribute(STATIC_CATEGORIES.All)}:checked) .${cs
 								href={item.link}
 								rel="noopener noreferrer"
 								target="_blank"
-								set:html={item.title ?? item.link}
+								set:html={item.title || `A post from ${item.feedName}`}
 								class="underline block break-words"
 							/>
 							<div class="no-underline text-sm font-normal">
