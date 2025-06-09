@@ -1,3 +1,53 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+	--font-system: system-ui, sans-serif;
+	--font-transitional: charter, "Bitstream Charter", "Sitka Text", cambria,
+		serif;
+	--font-old-style: "Iowan Old Style", "Palatino Linotype", "URW Palladio L",
+		p052, serif;
+	--font-humanist: seravek, "Gill Sans Nova", ubuntu, calibri, "DejaVu Sans",
+		source-sans-pro, sans-serif;
+	--font-gemoetric-humanist: avenir, montserrat, corbel, "URW Gothic",
+		source-sans-pro, sans-serif;
+	--font-classical-humanist: optima, candara, "Noto Sans", source-sans-pro,
+		sans-serif;
+	--font-neo-grotesque: inter, roboto, "Helvetica Neue", "Arial Nova",
+		"Nimbus Sans", arial, sans-serif;
+	--font-monospace-slab-serif: "Nimbus Mono PS", "Courier New", monospace;
+	--font-monospace-code: ui-monospace, "Cascadia Code", "Source Code Pro", menlo,
+		consolas, "DejaVu Sans Mono", monospace;
+	--font-industrial: bahnschrift, "DIN Alternate", "Franklin Gothic Medium",
+		"Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
+	--font-rounded-sans: ui-rounded, "Hiragino Maru Gothic ProN", quicksand,
+		comfortaa, manjari, "Arial Rounded MT", "Arial Rounded MT Bold", calibri,
+		source-sans-pro, sans-serif;
+	--font-slab-serif: rockwell, "Rockwell Nova", "Roboto Slab", "DejaVu Serif",
+		"Sitka Small", serif;
+	--font-antique: superclarendon, "Bookman Old Style", "URW Bookman",
+		"URW Bookman L", "Georgia Pro", georgia, serif;
+	--font-didone: didot, "Bodoni MT", "Noto Serif Display", "URW Palladio L",
+		p052, sylfaen, serif;
+	--font-handwritten: "Segoe Print", "Bradley Hand", chilanka, tscu_comic,
+		casual, cursive;
+	--font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+		"Noto Color Emoji";
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentcolor);
+	}
+}
