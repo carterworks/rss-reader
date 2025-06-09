@@ -16,7 +16,7 @@
 	"dependencies": {
 		"@extractus/feed-extractor": "^7.1.3",
 		"@github/relative-time-element": "^4.4.3",
-		"astro": "4.16.10"
+		"astro": "^5.9.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.1",
@@ -27,5 +27,11 @@
 		"tailwindcss": "^4.1.8",
 		"typescript": "^5.1.3"
 	},
-	"trustedDependencies": ["@biomejs/biome"]
+	"trustedDependencies": [
+		"@biomejs/biome",
+		"@tailwindcss/oxide",
+		"esbuild",
+		"lefthook",
+		"sharp"
+	]
 }
