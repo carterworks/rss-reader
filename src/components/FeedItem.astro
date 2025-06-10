@@ -1,0 +1,46 @@
+---
+import type { FeedItem } from "../services/feeds.ts";
+import ArchiveIcon from "./icons/ArchiveIcon.astro";
+import LinkIcon from "./icons/LinkIcon.astro";
+
+interface Props {
+	item: FeedItem;
+	as?: "li" | "div";
+	class?: string;
+}
+
+const {
+	item,
+	as: Element = "div",
+	class: additionalClasses = "",
+} = Astro.props satisfies Props;
+
+const yazzyUrl = import.meta.env.YAZZY_URL satisfies string | undefined;
+
+const faviconUrl = `https://www.google.com/s2/favicons?domain=${item.feedLink}`;
+---
+
+<Element
+	class={`flex flex-row gap-2 grayscale hover:grayscale-0 hover:bg-gray-100 rounded-md p-1 transition-all *:mt-2${additionalClasses}`}
+>
+	<img src={faviconUrl} alt={`Favicon for ${item.feedName}`} class="w-4 h-4" />
+	<div class="grow !mt-0">
+		<a href={item.link} class="">
+			<h2 class="text-lg font-bold">{item.title}</h2>
+			<p>
+				{item.feedName} • {item.category} • <relative-time
+					datetime={new Date(item.pubIsoDate).toISOString()}></relative-time>
+			</p>
+		</a>
+	</div>
+	<a href={`https://archive.is/${item.link}`}>
+		<ArchiveIcon title="Open in archive.is" />
+	</a>
+	{
+		yazzyUrl && (
+			<a href={`${yazzyUrl}/${item.link}`}>
+				<LinkIcon title="Open in Yazzy" />
+			</a>
+		)
+	}
+</Element>
