@@ -1,6 +1,6 @@
 import { extract } from "@extractus/feed-extractor";
 
-interface FeedItem {
+export interface FeedItem {
 	title: string;
 	feedName: string;
 	feedLink: string;
@@ -29,23 +29,31 @@ async function parseFeedContents(
 			useISODateFormat: false,
 		});
 		items = (result.entries ?? []).map((entry) => ({
-			feedName: result.title,
-			feedLink: result.link,
+			feedName: result.title ?? "",
+			feedLink: result.link ?? "",
 			category,
-			title: entry.title,
-			pubIsoDate: new Date(entry.published).getTime(),
-			link: entry.link,
+			title: entry.title ?? "",
+			pubIsoDate: new Date(entry.published ?? "").getTime(),
+			link: entry.link ?? "",
 		}));
 	} catch (err) {
 		console.error(`${feedUrl}\n${err}`);
 		throw err;
 	} finally {
-		console.log(`Fetched: ${feedUrl} in ${(performance.now() - start) / 1000}s`);
+		console.log(
+			`Fetched: ${feedUrl} in ${(performance.now() - start) / 1000}s`,
+		);
 	}
 	return items;
 }
 
-export default async function getAllFeedItems(): Promise<{
+/**
+ * @param {number} [cutoffTime] - The time to cutoff the feed items.
+ * @returns {Promise<{contents: FeedItem[], errors: Error[]}>} The feed items.
+ */
+export default async function getAllFeedItems(
+	cutoffTime: number = Date.now() - 6 * 60 * 60 * 1000,
+): Promise<{
 	contents: FeedItem[];
 	errors: Error[];
 }> {
@@ -79,7 +87,10 @@ export default async function getAllFeedItems(): Promise<{
 			}
 			return acc;
 		},
-		{ contents: [], errors: [] },
+		{ contents: [] as FeedItem[], errors: [] as Error[] },
+	);
+	results.contents = results.contents.filter(
+		(item) => item.pubIsoDate > cutoffTime,
 	);
 	results.contents.sort((a, b) => b.pubIsoDate - a.pubIsoDate);
 	return results;
