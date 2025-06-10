@@ -1,5 +1,5 @@
 ---
-import type {FeedItem} from "../services/feeds.ts";
+import type { FeedItem } from "../services/feeds.ts";
 import ArchiveIcon from "./icons/ArchiveIcon.astro";
 import LinkIcon from "./icons/LinkIcon.astro";
 
@@ -20,10 +20,12 @@ const yazzyUrl = import.meta.env.YAZZY_URL satisfies string | undefined;
 const faviconUrl = `https://www.google.com/s2/favicons?domain=${item.feedLink}`;
 ---
 
-<Element
-	class={`flex flex-row gap-2 transition-all grayscale hover:grayscale-0 *:mt-2 ${additionalClasses}`}
->
-	<img src={faviconUrl} alt={`Favicon for ${item.feedName}`} class="w-4 h-4" />
+<Element class={`flex flex-row gap-2 group *:mt-2 ${additionalClasses}`}>
+	<img
+		src={faviconUrl}
+		alt={`Favicon for ${item.feedName}`}
+		class="w-4 h-4 transition-all grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0"
+	/>
 	<div class="grow !mt-0">
 		<a href={item.link} class="block">
 			<h2 class="text-lg font-bold">{item.title}</h2>

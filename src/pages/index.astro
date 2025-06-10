@@ -6,7 +6,7 @@ import CodeFileIcon from "../components/icons/CodeFileIcon.astro";
 import DocumentIcon from "../components/icons/DocumentIcon.astro";
 import getAllFeedItems from "../services/feeds";
 
-const {contents: feedItems} = await getAllFeedItems();
+const { contents: feedItems } = await getAllFeedItems();
 const updateTime = new Date();
 ---
 
@@ -28,26 +28,26 @@ const updateTime = new Date();
 			import "@github/relative-time-element";
 		</script>
 	</head>
-	<body class="m-2 max-w-[65ch] mx-auto">
+	<body class="max-w-prose mx-auto py-2 md:px-4 bg-bg text-tx">
 		<header class="flex flex-row gap-4">
 			<h1 class="grow">Carter's RSS Feeds</h1>
-			<div class="flex flex-row gap-1 items-center">
-				<ClockIcon />
+			<div class="flex flex-row gap-1 items-start">
+				<ClockIcon class="mt-1" />
 				<relative-time datetime={updateTime}></relative-time>
 			</div>
-			<div class="flex flex-row gap-1 items-center">
-				<DocumentIcon />
+			<div class="flex flex-row gap-1 items-start">
+				<DocumentIcon class="mt-1" />
 				<p>
-					{feedItems.length} items
+					{feedItems.length}<span class="hidden md:inline">&nbsp;items</span>
 				</p>
 			</div>
 			<a
 				href="https://github.com/carterworks/rss-reader"
-				class="pointer flex flex-row gap-1 items-center"
+				class="pointer flex flex-row gap-1 items-start"
 				title="View the source code on GitHub"
 			>
-				<CodeFileIcon />
-				<span>GitHub</span>
+				<CodeFileIcon class="mt-1" />
+				<span class="hidden md:inline">GitHub</span>
 			</a>
 		</header>
 		<main>
