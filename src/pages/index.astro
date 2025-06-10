@@ -58,8 +58,9 @@ const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
 				<li class="italic flex flex-row gap-2 items-center not-first:mt-2">
 					<hr class="grow-1 border-tx" />
 					<p class="text-center">
-						Thus ends the feed. At least since <relative-time
-							datetime={cutoffTime}></relative-time>.
+						Thus ends the feed. At least for the past
+						<relative-time datetime={cutoffTime} format="duration"
+						></relative-time>.
 					</p>
 					<hr class="grow-1 border-tx" />
 				</li>
