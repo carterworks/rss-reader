@@ -29,11 +29,11 @@ async function parseFeedContents(
 			useISODateFormat: false,
 		});
 		items = (result.entries ?? []).map((entry) => ({
-			feedName: result.title ?? "",
+			feedName: result.title ?? "Unknown Feed",
 			feedLink: result.link ?? "",
 			category,
-			title: entry.title ?? "",
-			pubIsoDate: new Date(entry.published ?? "").getTime(),
+			title: entry.title ?? `A post from ${result.title}`,
+			pubIsoDate: new Date(entry.published ?? new Date()).getTime(),
 			link: entry.link ?? "",
 		}));
 	} catch (err) {
