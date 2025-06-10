@@ -50,4 +50,14 @@
 	::file-selector-button {
 		border-color: var(--color-gray-200, currentcolor);
 	}
+
+	a {
+		@apply transition-all rounded-md;
+	}
+	a:hover {
+		background-color: var(--color-gray-200);
+	}
+	a:active {
+		background-color: var(--color-gray-100);
+	}
 }

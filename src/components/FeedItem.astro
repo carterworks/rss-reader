@@ -1,5 +1,5 @@
 ---
-import type { FeedItem } from "../services/feeds.ts";
+import type {FeedItem} from "../services/feeds.ts";
 import ArchiveIcon from "./icons/ArchiveIcon.astro";
 import LinkIcon from "./icons/LinkIcon.astro";
 
@@ -21,11 +21,11 @@ const faviconUrl = `https://www.google.com/s2/favicons?domain=${item.feedLink}`;
 ---
 
 <Element
-	class={`flex flex-row gap-2 grayscale hover:grayscale-0 hover:bg-gray-100 rounded-md p-1 transition-all *:mt-2${additionalClasses}`}
+	class={`flex flex-row gap-2 transition-all grayscale hover:grayscale-0 *:mt-2 ${additionalClasses}`}
 >
 	<img src={faviconUrl} alt={`Favicon for ${item.feedName}`} class="w-4 h-4" />
 	<div class="grow !mt-0">
-		<a href={item.link} class="">
+		<a href={item.link} class="block">
 			<h2 class="text-lg font-bold">{item.title}</h2>
 			<p>
 				{item.feedName} • {item.category} • <relative-time
@@ -33,12 +33,20 @@ const faviconUrl = `https://www.google.com/s2/favicons?domain=${item.feedLink}`;
 			</p>
 		</a>
 	</div>
-	<a href={`https://archive.is/${item.link}`}>
+	<a
+		href={`https://archive.is/${item.link}`}
+		aria-label="Open in archive.is"
+		class="w-auto"
+	>
 		<ArchiveIcon title="Open in archive.is" />
 	</a>
 	{
 		yazzyUrl && (
-			<a href={`${yazzyUrl}/${item.link}`}>
+			<a
+				href={`${yazzyUrl}/${item.link}`}
+				aria-label="Open in Yazzy"
+				class="w-auto"
+			>
 				<LinkIcon title="Open in Yazzy" />
 			</a>
 		)
