@@ -4,10 +4,10 @@ import FeedItem from "../components/FeedItem.astro";
 import ClockIcon from "../components/icons/ClockIcon.astro";
 import CodeFileIcon from "../components/icons/CodeFileIcon.astro";
 import DocumentIcon from "../components/icons/DocumentIcon.astro";
-import getAllFeedItems, {RECENT_FEED_CUTOFF_TIME} from "../services/feeds";
+import getAllFeedItems, { RECENT_FEED_CUTOFF_TIME } from "../services/feeds";
 
 const basePath = import.meta.env.BASE_URL satisfies string | undefined;
-const {contents: feedItems} = await getAllFeedItems();
+const { contents: feedItems } = await getAllFeedItems();
 const updateTime = new Date();
 const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
 ---
@@ -30,7 +30,7 @@ const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
 			import "@github/relative-time-element";
 		</script>
 	</head>
-	<body class="max-w-prose mx-auto py-2 md:px-4 bg-bg text-tx">
+	<body class="max-w-prose mx-auto py-2 px-2 md:px-0 bg-bg text-tx">
 		<header class="flex flex-row gap-4">
 			<h1 class="grow">Carter's RSS Feeds</h1>
 			<div class="flex flex-row gap-1 items-start">
