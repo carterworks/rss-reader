@@ -4,11 +4,12 @@ import FeedItem from "../components/FeedItem.astro";
 import ClockIcon from "../components/icons/ClockIcon.astro";
 import CodeFileIcon from "../components/icons/CodeFileIcon.astro";
 import DocumentIcon from "../components/icons/DocumentIcon.astro";
-import getAllFeedItems from "../services/feeds";
+import getAllFeedItems, {RECENT_FEED_CUTOFF_TIME} from "../services/feeds";
 
 const basePath = import.meta.env.BASE_URL satisfies string | undefined;
-const { contents: feedItems } = await getAllFeedItems();
+const {contents: feedItems} = await getAllFeedItems();
 const updateTime = new Date();
+const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
 ---
 
 <!doctype html>
@@ -54,6 +55,14 @@ const updateTime = new Date();
 		<main>
 			<ul>
 				{feedItems.map((item) => <FeedItem item={item} as="li" />)}
+				<li class="italic flex flex-row gap-2 items-center not-first:mt-2">
+					<hr class="grow-1 border-tx" />
+					<p class="text-center">
+						Thus ends the feed. At least since <relative-time
+							datetime={cutoffTime}></relative-time>.
+					</p>
+					<hr class="grow-1 border-tx" />
+				</li>
 			</ul>
 		</main>
 	</body>

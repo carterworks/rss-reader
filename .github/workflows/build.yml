@@ -32,6 +32,7 @@ jobs:
         env:
           YAZZY_URL: ${{ vars.YAZZY_URL }}
           FEEDS: ${{ vars.FEEDS }}
+          RECENT_FEED_CUTOFF_TIME: ${{ vars.RECENT_FEED_CUTOFF_TIME }}
 
   deploy:
     needs: build

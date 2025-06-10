@@ -1,5 +1,9 @@
 import { extract } from "@extractus/feed-extractor";
 
+export const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
+	? Number.parseInt(import.meta.env.RECENT_FEED_CUTOFF_TIME)
+	: 6 * 60 * 60 * 1000;
+
 export interface FeedItem {
 	title: string;
 	feedName: string;
@@ -52,7 +56,7 @@ async function parseFeedContents(
  * @returns {Promise<{contents: FeedItem[], errors: Error[]}>} The feed items.
  */
 export default async function getAllFeedItems(
-	cutoffTime: number = Date.now() - 6 * 60 * 60 * 1000,
+	cutoffTime: number = Date.now() - RECENT_FEED_CUTOFF_TIME,
 ): Promise<{
 	contents: FeedItem[];
 	errors: Error[];
