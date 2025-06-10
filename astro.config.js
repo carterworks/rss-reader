@@ -5,6 +5,7 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
 	site: "https://carterworks.github.io/",
 	base: "rss-reader",
+	trailingSlash: "never",
 	output: "static",
 	vite: {
 		plugins: [tailwindcss()],

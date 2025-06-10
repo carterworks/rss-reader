@@ -6,6 +6,7 @@ import CodeFileIcon from "../components/icons/CodeFileIcon.astro";
 import DocumentIcon from "../components/icons/DocumentIcon.astro";
 import getAllFeedItems from "../services/feeds";
 
+const basePath = import.meta.env.BASE_URL satisfies string | undefined;
 const { contents: feedItems } = await getAllFeedItems();
 const updateTime = new Date();
 ---
@@ -19,11 +20,11 @@ const updateTime = new Date();
 		<title>Carter's RSS Feeds</title>
 		<link
 			rel="icon"
-			href="/rss-reader/news-emoji.svg"
+			href={`${basePath}/news-emoji.svg`}
 			sizes="any"
 			type="image/svg+xml"
 		/>
-		<link rel="manifest" href="/rss-reader/manifest.json" />
+		<link rel="manifest" href={`${basePath}/manifest.json`} />
 		<script>
 			import "@github/relative-time-element";
 		</script>
