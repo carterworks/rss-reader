@@ -33,12 +33,12 @@ async function parseFeedContents(
 			useISODateFormat: false,
 		});
 		items = (result.entries ?? []).map((entry) => ({
-			feedName: result.title ?? "Unknown Feed",
-			feedLink: result.link ?? "",
+			feedName: result.title || "Unknown Feed",
+			feedLink: result.link || "",
 			category,
-			title: entry.title ?? `A post from ${result.title}`,
+			title: entry.title || `A post from ${result.title}`,
 			pubIsoDate: new Date(entry.published ?? new Date()).getTime(),
-			link: entry.link ?? "",
+			link: entry.link || "",
 		}));
 	} catch (err) {
 		console.error(`${feedUrl}\n${err}`);
