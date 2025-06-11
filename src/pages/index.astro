@@ -1,15 +1,33 @@
 ---
 import "../styles/global.css";
+import Parser from "rss-parser";
 import FeedItem from "../components/FeedItem.astro";
 import ClockIcon from "../components/icons/ClockIcon.astro";
 import CodeFileIcon from "../components/icons/CodeFileIcon.astro";
 import DocumentIcon from "../components/icons/DocumentIcon.astro";
-import getAllFeedItems, { RECENT_FEED_CUTOFF_TIME } from "../services/feeds";
+import { GET } from "./feed.xml";
+
+const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
+	? Number.parseInt(import.meta.env.RECENT_FEED_CUTOFF_TIME)
+	: 6 * 60 * 60 * 1000;
 
 const basePath = import.meta.env.BASE_URL satisfies string | undefined;
-const { contents: feedItems } = await getAllFeedItems();
+
+async function getAllFeedItems() {
+	const response = await GET(Astro);
+	return new Parser().parseString(await response.text());
+}
+
+const feed = await getAllFeedItems();
 const updateTime = new Date();
 const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
+const items = feed.items
+	.filter((item) => item.pubDate && new Date(item.pubDate) > cutoffTime)
+	.sort(
+		(a, b) =>
+			new Date(b.pubDate ?? b.isoDate ?? b.updated).getTime() -
+			new Date(a.pubDate ?? a.isoDate ?? a.updated).getTime(),
+	);
 ---
 
 <!doctype html>
@@ -40,7 +58,7 @@ const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
 			<div class="flex flex-row gap-1 items-start">
 				<DocumentIcon class="mt-1" />
 				<p>
-					{feedItems.length}<span class="hidden md:inline">&nbsp;items</span>
+					{items.length}<span class="hidden md:inline">&nbsp;items</span>
 				</p>
 			</div>
 			<a
@@ -53,8 +71,8 @@ const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
 			</a>
 		</header>
 		<main>
-			<ul>
-				{feedItems.map((item) => <FeedItem item={item} as="li" />)}
+			<ul class="space-y-2">
+				{items.map((item) => <FeedItem item={item} as="li" />)}
 				<li class="italic flex flex-row gap-2 items-center not-first:mt-2">
 					<hr class="grow-1 border-tx" />
 					<p class="text-center">
