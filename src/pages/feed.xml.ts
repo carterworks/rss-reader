@@ -5,6 +5,10 @@ function getFeedCategories(): Record<string, string[]> {
 	return JSON.parse(import.meta.env.FEEDS ?? "{}");
 }
 
+function xmlEncode(str: string) {
+	return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 	const categories = getFeedCategories();
 	const feedToCategoryMap = new Map<string, string>();
@@ -15,7 +19,7 @@ export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 	}
 
 	console.log(
-		`Retrieved ${feedToCategoryMap.size} feeds from ${Object.values(categories).flat().length} categories`,
+		`Retrieved ${feedToCategoryMap.size} feeds from ${Object.values(categories).length} categories`,
 	);
 	const parser = new Parser();
 	const feedPromises = Object.values(categories)
@@ -68,7 +72,7 @@ export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 
 	// Add categories to the main feed
 	for (const category of Object.keys(categories)) {
-		feed.addCategory(category);
+		feed.addCategory(xmlEncode(category));
 	}
 
 	for (const f of feeds) {
@@ -108,8 +112,8 @@ export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 						: new Date(),
 				category: [
 					{
-						name: feedCategory,
-						term: feedCategory,
+						name: xmlEncode(feedCategory),
+						term: xmlEncode(feedCategory),
 					},
 				],
 			});

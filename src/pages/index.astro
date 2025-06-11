@@ -18,11 +18,17 @@ async function getAllFeedItems() {
 	const response = await GET(Astro);
 	return new Parser().parseString(await response.text());
 }
-
-const feed = await getAllFeedItems();
+let feed: ReturnType<typeof getAllFeedItems> | undefined;
+let error: Error | undefined;
+try {
+	feed = getAllFeedItems();
+} catch (err) {
+	error = err as Error;
+	error.message = `Error fetching feeds: ${error.message}`;
+}
 const updateTime = new Date();
 const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
-const items = feed.items
+const items = (await feed)?.items
 	.filter((item) => item.pubDate && new Date(item.pubDate) > cutoffTime)
 	.sort(
 		(a, b) =>
@@ -65,7 +71,7 @@ const items = feed.items
 			<div class="flex flex-row gap-1 items-start">
 				<DocumentIcon class="mt-1" />
 				<p>
-					{items.length}<span class="hidden md:inline">&nbsp;items</span>
+					{items?.length}<span class="hidden md:inline">&nbsp;items</span>
 				</p>
 			</div>
 			<a
@@ -86,18 +92,31 @@ const items = feed.items
 			</a>
 		</header>
 		<main>
-			<ul class="space-y-2">
-				{items.map((item) => <FeedItem item={item} as="li" />)}
-				<li class="italic flex flex-row gap-2 items-center not-first:mt-2">
-					<hr class="grow-1 border-tx" />
-					<p class="text-center">
-						Thus ends the feed. At least for the past
-						<relative-time datetime={cutoffTime} format="duration"
-						></relative-time>.
-					</p>
-					<hr class="grow-1 border-tx" />
-				</li>
-			</ul>
+			{
+				error && (
+					<>
+						<p class="italic">Error fetching feeds: {error.message}</p>
+						<p class="italic">Please try again later.</p>
+					</>
+				)
+			}
+			{
+				!error && (
+					<ul class="space-y-2">
+						{items?.map((item) => (
+							<FeedItem item={item} as="li" />
+						))}
+						<li class="italic flex flex-row gap-2 items-center not-first:mt-2">
+							<hr class="grow-1 border-tx" />
+							<p class="text-center">
+								Thus ends the feed. At least for the past
+								<relative-time datetime={cutoffTime} format="duration" />.
+							</p>
+							<hr class="grow-1 border-tx" />
+						</li>
+					</ul>
+				)
+			}
 		</main>
 	</body>
 </html>
