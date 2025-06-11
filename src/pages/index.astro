@@ -1,10 +1,11 @@
 ---
-import "../styles/global.css";
 import Parser from "rss-parser";
 import FeedItem from "../components/FeedItem.astro";
+import BookmarkIcon from "../components/icons/BookmarkIcon.astro";
 import ClockIcon from "../components/icons/ClockIcon.astro";
 import CodeFileIcon from "../components/icons/CodeFileIcon.astro";
 import DocumentIcon from "../components/icons/DocumentIcon.astro";
+import "../styles/global.css";
 import { GET } from "./feed.xml";
 
 const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
@@ -43,6 +44,12 @@ const items = feed.items
 			sizes="any"
 			type="image/svg+xml"
 		/>
+		<link
+			rel="alternate"
+			href={`${basePath}/feed.xml`}
+			title="Carter's RSS Feeds"
+			type="application/atom+xml"
+		/>
 		<link rel="manifest" href={`${basePath}/manifest.json`} />
 		<script>
 			import "@github/relative-time-element";
@@ -68,6 +75,14 @@ const items = feed.items
 			>
 				<CodeFileIcon class="mt-1" />
 				<span class="hidden md:inline">GitHub</span>
+			</a>
+			<a
+				href={`${basePath}/feed.xml`}
+				class="pointer flex flex-row gap-1 items-start"
+				title="RSS/Atom Feed"
+			>
+				<BookmarkIcon class="mt-1" />
+				<span class="hidden md:inline">RSS/Atom Feed</span>
 			</a>
 		</header>
 		<main>
