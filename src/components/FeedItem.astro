@@ -26,21 +26,10 @@ const faviconUrl = `https://www.google.com/s2/favicons?domain=${item.link}`;
 		alt={`Favicon for ${item.link}`}
 		class="w-4 h-4 transition-all grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0"
 	/>
-	<div class="grow !mt-0">
+	<div class="grow min-w-0 !mt-0">
 		<a href={item.link} class="block">
 			<h2 class="text-lg font-bold">{item.title}</h2>
-			{
-				item.contentSnippet && (
-					<p>
-						{item.contentSnippet
-							.replace(/\n+/g, " ")
-							.trim()
-							.split(" ")
-							.slice(0, 15)
-							.join(" ") + "…"}
-					</p>
-				)
-			}
+			{item.contentSnippet && <p class="truncate">{item.contentSnippet}</p>}
 			<p>
 				{item.author} • <relative-time
 					datetime={new Date(item.pubDate ?? item.isoDate ?? "").toISOString()}
