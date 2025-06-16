@@ -9,10 +9,7 @@ function xmlEncode(str: string) {
 	return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-export async function getFeed({
-	requestUrl,
-	generator = "carter-rss-feeds:1.0.0",
-}: { requestUrl: string; generator?: string }): Promise<Feed> {
+export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 	const categories = getFeedCategories();
 	const feedToCategoryMap = new Map<string, string>();
 	for (const [category, feeds] of Object.entries(categories)) {
@@ -58,14 +55,14 @@ export async function getFeed({
 	const feed = new Feed({
 		title: "Carter's RSS Feeds",
 		description: `A collection of RSS feeds that Carter follows. Contains feeds from ${feedToCategoryMap.size} sources.`,
-		id: `tag:${new URL(requestUrl).hostname},${new Date().toISOString().slice(0, 10)}:feed`,
-		link: requestUrl,
+		id: `tag:${new URL(request.url).hostname},${new Date().toISOString().slice(0, 10)}:feed`,
+		link: request.url,
 		language: "en-US",
 		updated: new Date(),
 		generator,
 		copyright: `All rights reserved ${new Date().getFullYear()}`,
 		feedLinks: {
-			atom: requestUrl,
+			atom: request.url,
 		},
 		author: {
 			name: "Carter",
@@ -123,22 +120,9 @@ export async function getFeed({
 		}
 	}
 
-	return feed;
-}
-
-export const GET: import("astro").APIRoute = async ({ request, generator }) => {
-	try {
-		const feed = await getFeed({ requestUrl: request.url, generator });
-
-		return new Response(feed.atom1(), {
-			headers: {
-				"Content-Type": "application/atom+xml",
-			},
-		});
-	} catch (e) {
-		console.error(e);
-		return new Response(e instanceof Error ? e.message : String(e), {
-			status: 500,
-		});
-	}
+	return new Response(feed.atom1(), {
+		headers: {
+			"Content-Type": "application/atom+xml",
+		},
+	});
 };
