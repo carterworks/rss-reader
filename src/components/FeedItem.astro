@@ -16,16 +16,36 @@ const {
 } = Astro.props satisfies Props;
 
 const yazzyUrl = import.meta.env.YAZZY_URL satisfies string | undefined;
+const basePath = (import.meta.env.BASE_PATH satisfies string) ?? "";
 
-const faviconUrl = `https://www.google.com/s2/favicons?domain=${item.link}`;
+const link = item.link;
+const faviconUrl: string | null = link
+	? `${basePath}/icons/${new URL(link).hostname}.ico`
+	: null;
+const faviconAlt: string | null = link
+	? `Favicon for ${new URL(link).hostname}`
+	: null;
 ---
 
 <Element class={`flex flex-row gap-2 group *:mt-2 ${additionalClasses}`}>
-	<img
-		src={faviconUrl}
-		alt={`Favicon for ${item.link}`}
-		class="w-4 h-4 transition-all grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0"
-	/>
+	{
+		faviconUrl && (
+			<img
+				src={faviconUrl}
+				alt={faviconAlt}
+				class="w-4 h-4 transition-all grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0"
+			/>
+		)
+	}
+	{
+		!faviconUrl && (
+			<img
+				src={`${basePath}/news-emoji.svg`}
+				alt="News emoji"
+				class="w-4 h-4 transition-all grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0"
+			/>
+		)
+	}
 	<div class="grow min-w-0 !mt-0">
 		<a href={item.link} class="block">
 			<h2 class="text-lg font-bold">{item.title}</h2>
