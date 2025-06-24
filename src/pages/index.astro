@@ -17,10 +17,10 @@ async function getAllFeedItems() {
 	const response = await GET(Astro);
 	return new Parser().parseString(await response.text());
 }
-let feed: ReturnType<typeof getAllFeedItems> | undefined;
+let feed: Awaited<ReturnType<typeof getAllFeedItems>> | undefined;
 let error: Error | undefined;
 try {
-	feed = getAllFeedItems();
+	feed = await getAllFeedItems();
 } catch (err) {
 	error = err as Error;
 	error.message = `Error fetching feeds: ${error.message}`;
