@@ -29,6 +29,7 @@ export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 				const feed = await parser.parseURL(feedUrl);
 				return feed;
 			} catch (e) {
+				console.error(`[feed.xml.ts] Error parsing feed ${feedUrl}:`, e);
 				let err: Error;
 				if (typeof e === "string") {
 					err = new Error(e);
@@ -52,6 +53,9 @@ export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 	console.error("Errors:", errors);
 
 	// combine all parsed feeds into a single atom feed.
+	console.log(
+		`[feed.xml.ts] Creating combined feed with ${feeds.length} successfully parsed feeds`,
+	);
 	const feed = new Feed({
 		title: "Carter's RSS Feeds",
 		description: `A collection of RSS feeds that Carter follows. Contains feeds from ${feedToCategoryMap.size} sources.`,
@@ -75,6 +79,7 @@ export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 		feed.addCategory(xmlEncode(category));
 	}
 
+	let totalItemsAdded = 0;
 	for (const f of feeds) {
 		const feedCategory =
 			feedToCategoryMap.get(f.feedUrl ?? f.link ?? "") ?? "Uncategorized";
@@ -87,42 +92,80 @@ export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 				title = `A new post from ${f.title}`;
 			}
 
-			feed.addItem({
-				title: title || `A post from ${f.title || "an unknown source"}`,
-				id: e.guid || e.link || `${f.feedUrl || ""}#${e.title || "item"}`,
-				link: e.link || f.link || "",
-				description: e.contentSnippet || e.content || e.summary || "",
-				content: e.content || e.contentSnippet || e.summary || "",
-				author: e.creator
-					? [
-							{
-								name: e.creator,
-							},
-						]
-					: [
-							{
-								name: f.title || "Unknown",
-								link: f.link || "",
-							},
-						],
-				date: e.pubDate
-					? new Date(e.pubDate)
-					: e.isoDate
-						? new Date(e.isoDate)
-						: new Date(),
-				category: [
-					{
-						name: xmlEncode(feedCategory),
-						term: xmlEncode(feedCategory),
-					},
-				],
-			});
+			try {
+				// XML encode all text content to prevent malformed XML
+				const safeTitle = xmlEncode(
+					title || `A post from ${f.title || "an unknown source"}`,
+				);
+				const safeDescription = xmlEncode(
+					e.contentSnippet || e.content || e.summary || "",
+				);
+				const safeContent = xmlEncode(
+					e.content || e.contentSnippet || e.summary || "",
+				);
+				const safeAuthorName = xmlEncode(e.creator || f.title || "Unknown");
+
+				feed.addItem({
+					title: safeTitle,
+					id: e.guid || e.link || `${f.feedUrl || ""}#${e.title || "item"}`,
+					link: e.link || f.link || "",
+					description: safeDescription,
+					content: safeContent,
+					author: e.creator
+						? [
+								{
+									name: safeAuthorName,
+								},
+							]
+						: [
+								{
+									name: safeAuthorName,
+									link: f.link || "",
+								},
+							],
+					date: e.pubDate
+						? new Date(e.pubDate)
+						: e.isoDate
+							? new Date(e.isoDate)
+							: new Date(),
+					category: [
+						{
+							name: xmlEncode(feedCategory),
+							term: xmlEncode(feedCategory),
+						},
+					],
+				});
+				totalItemsAdded++;
+			} catch (itemError) {
+				console.error(
+					`[feed.xml.ts] Error adding item from ${f.title || f.feedUrl}:`,
+					itemError,
+				);
+				console.error("[feed.xml.ts] Problematic item:", {
+					title: e.title,
+					link: e.link,
+					content: `${e.content?.substring(0, 200)}...`,
+					contentSnippet: `${e.contentSnippet?.substring(0, 200)}...`,
+				});
+			}
 		}
 	}
+	console.log(
+		`[feed.xml.ts] Added ${totalItemsAdded} total items to combined feed`,
+	);
 
-	return new Response(feed.atom1(), {
-		headers: {
-			"Content-Type": "application/atom+xml",
-		},
-	});
+	try {
+		const atomXml = feed.atom1();
+		console.log(
+			`[feed.xml.ts] Generated Atom XML with ${totalItemsAdded} items (${atomXml.length} chars)`,
+		);
+		return new Response(atomXml, {
+			headers: {
+				"Content-Type": "application/atom+xml",
+			},
+		});
+	} catch (xmlError) {
+		console.error("[feed.xml.ts] Error generating final XML:", xmlError);
+		throw xmlError;
+	}
 };

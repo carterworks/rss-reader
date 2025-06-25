@@ -22,6 +22,7 @@ let error: Error | undefined;
 try {
 	feed = await getAllFeedItems();
 } catch (err) {
+	console.error("[index.astro] Error fetching/parsing feeds:", err);
 	error = err as Error;
 	error.message = `Error fetching feeds: ${error.message}`;
 }
