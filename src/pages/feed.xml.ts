@@ -1,56 +1,17 @@
 import { Feed } from "feed";
-import Parser from "rss-parser";
-
-function getFeedCategories(): Record<string, string[]> {
-	return JSON.parse(import.meta.env.FEEDS ?? "{}");
-}
+import { fetchFeedData } from "../lib/feedData";
 
 function xmlEncode(str: string) {
 	return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 export const GET: import("astro").APIRoute = async ({ request, generator }) => {
-	const categories = getFeedCategories();
-	const feedToCategoryMap = new Map<string, string>();
-	for (const [category, feeds] of Object.entries(categories)) {
-		for (const feed of feeds) {
-			feedToCategoryMap.set(feed, category);
-		}
-	}
+	const { categories, feedToCategoryMap, feeds, errors } =
+		await fetchFeedData();
 
 	console.log(
-		`Retrieved ${feedToCategoryMap.size} feeds from ${Object.values(categories).length} categories`,
+		`[feed.xml.ts] Using cached feed data: ${feeds.length} feeds (${errors.length} errors)`,
 	);
-	const parser = new Parser();
-	const feedPromises = Object.values(categories)
-		.flat()
-		.map(async (feedUrl) => {
-			try {
-				const feed = await parser.parseURL(feedUrl);
-				return feed;
-			} catch (e) {
-				console.error(`[feed.xml.ts] Error parsing feed ${feedUrl}:`, e);
-				let err: Error;
-				if (typeof e === "string") {
-					err = new Error(e);
-				} else if (!(e instanceof Error)) {
-					err = new Error(`${e}`);
-				} else {
-					err = e;
-				}
-				err.message = `[${feedUrl}] ${err.message ?? e}`;
-				throw err;
-			}
-		});
-	const results = await Promise.allSettled(feedPromises);
-	const feeds = results
-		.filter((result) => result.status === "fulfilled")
-		.map((result) => result.value);
-	const errors = results
-		.filter((result) => result.status === "rejected")
-		.map((result) => result.reason);
-	console.log(`Fetched ${feeds.length} feeds with ${errors.length} errors`);
-	console.error("Errors:", errors);
 
 	// combine all parsed feeds into a single atom feed.
 	console.log(

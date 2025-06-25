@@ -1,11 +1,11 @@
 ---
-import Parser from "rss-parser";
+import type Parser from "rss-parser";
 import FeedItem from "../components/FeedItem.astro";
 import BookmarkIcon from "../components/icons/BookmarkIcon.astro";
 import CodeFileIcon from "../components/icons/CodeFileIcon.astro";
 import DocumentIcon from "../components/icons/DocumentIcon.astro";
 import "../styles/global.css";
-import { GET } from "./feed.xml";
+import { fetchFeedData } from "../lib/feedData";
 
 const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
 	? Number.parseInt(import.meta.env.RECENT_FEED_CUTOFF_TIME)
@@ -13,14 +13,16 @@ const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
 
 const basePath = import.meta.env.BASE_URL satisfies string | undefined;
 
-async function getAllFeedItems() {
-	const response = await GET(Astro);
-	return new Parser().parseString(await response.text());
+type FeedItemType = Parser.Item & { updated?: string; isoDate?: string };
+
+async function getAllFeedItems(): Promise<FeedItemType[]> {
+	const { feeds } = await fetchFeedData();
+	return feeds.flatMap((f) => f.items) as FeedItemType[];
 }
-let feed: Awaited<ReturnType<typeof getAllFeedItems>> | undefined;
+let items: FeedItemType[] | undefined;
 let error: Error | undefined;
 try {
-	feed = await getAllFeedItems();
+	items = await getAllFeedItems();
 } catch (err) {
 	console.error("[index.astro] Error fetching/parsing feeds:", err);
 	error = err as Error;
@@ -28,12 +30,12 @@ try {
 }
 const updateTime = new Date();
 const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
-const items = (await feed)?.items
-	.filter((item) => item.pubDate && new Date(item.pubDate) > cutoffTime)
+items = items
+	?.filter((item) => item.pubDate && new Date(item.pubDate) > cutoffTime)
 	.sort(
 		(a, b) =>
-			new Date(b.pubDate ?? b.isoDate ?? b.updated).getTime() -
-			new Date(a.pubDate ?? a.isoDate ?? a.updated).getTime(),
+			new Date(b.pubDate ?? b.isoDate ?? b.updated ?? "").getTime() -
+			new Date(a.pubDate ?? a.isoDate ?? a.updated ?? "").getTime(),
 	);
 ---
 
