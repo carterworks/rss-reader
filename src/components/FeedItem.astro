@@ -44,7 +44,9 @@ const hasFavicon = faviconPath
 			</h2>
 			{item.contentSnippet && <p class="truncate">{item.contentSnippet}</p>}
 			<p>
-				{item.creator ?? hostname} • <relative-time
+				{Boolean(item.creator) && `${item.creator} • `}
+				{Boolean(hostname) && `on ${hostname} • `}
+				<relative-time
 					datetime={new Date(item.pubDate ?? item.isoDate ?? "").toISOString()}
 				></relative-time>
 			</p>
