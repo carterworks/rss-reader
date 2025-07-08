@@ -17,18 +17,26 @@ const {
 } = Astro.props satisfies Props;
 
 const yazzyUrl = import.meta.env.YAZZY_URL satisfies string | undefined;
-console.log(`[FeedItem] base: ${base}`);
 const hostname = item.link ? new URL(item.link).hostname : undefined;
-const faviconUrl = hostname ? `${base}/icon/${hostname}.ico` : undefined;
+const faviconPath = hostname ? `${base}/icon/${hostname}.ico` : undefined;
+const hasFavicon = faviconPath
+	? await fetch(new URL(faviconPath, Astro.url)).then((r) => r.ok)
+	: false;
 ---
 
 <Element class={`flex flex-row gap-2 group *:mt-2 ${additionalClasses}`}>
-	<img
-		src={faviconUrl}
-		alt={`Favicon for ${item.link}`}
-		class="w-4 h-4 transition-all grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0"
-		loading="lazy"
-	/>
+	{
+		hasFavicon ? (
+			<img
+				src={faviconPath}
+				alt={`Favicon for ${item.link}`}
+				class="w-4 h-4 transition-all grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0"
+				loading="lazy"
+			/>
+		) : (
+			<LinkIcon title="No favicon" />
+		)
+	}
 	<div class="grow min-w-0 !mt-0">
 		<a href={item.link} class="block">
 			<h2 class="text-lg font-bold">{item.title}</h2>
