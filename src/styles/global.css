@@ -252,4 +252,22 @@
 	a:active {
 		background-color: var(--color-ui-3);
 	}
+
+	::backdrop {
+		@apply sepia brightness-50 overflow-hidden;
+	}
+
+	/* Popover styling */
+	[popover] {
+		@apply text-tx bg-bg;
+	}
+
+	[popover]::backdrop {
+		@apply bg-black/50 backdrop-blur-sm;
+	}
+
+	/* Prevent body scroll when popover is open */
+	body.popover-open {
+		overflow: hidden;
+	}
 }

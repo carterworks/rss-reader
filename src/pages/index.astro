@@ -5,6 +5,7 @@ import BookmarkIcon from "../components/icons/BookmarkIcon.astro";
 import CodeFileIcon from "../components/icons/CodeFileIcon.astro";
 import DocumentIcon from "../components/icons/DocumentIcon.astro";
 import "../styles/global.css";
+import BugIcon from "../components/icons/BugIcon.astro";
 import { fetchFeedData } from "../lib/feedData";
 
 const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
@@ -15,18 +16,27 @@ const basePath = import.meta.env.BASE_URL satisfies string | undefined;
 
 type FeedItemType = Parser.Item & { updated?: string; isoDate?: string };
 
-async function getAllFeedItems(): Promise<FeedItemType[]> {
-	const { feeds } = await fetchFeedData();
-	return feeds.flatMap((f) => f.items) as FeedItemType[];
+async function getAllFeedItems(): Promise<{
+	items: FeedItemType[];
+	errors: Error[];
+}> {
+	const data = await fetchFeedData();
+	return {
+		items: data.feeds.flatMap((f) => f.items) as FeedItemType[],
+		errors: data.errors,
+	};
 }
 let items: FeedItemType[] | undefined;
-let error: Error | undefined;
+let bigError: Error | undefined;
+let littleErrors: Error[] = [];
 try {
-	items = await getAllFeedItems();
+	const data = await getAllFeedItems();
+	littleErrors = data.errors;
+	items = data.items;
 } catch (err) {
 	console.error("[index.astro] Error fetching/parsing feeds:", err);
-	error = err as Error;
-	error.message = `Error fetching feeds: ${error.message}`;
+	bigError = err as Error;
+	bigError.message = `Error fetching feeds: ${bigError.message}`;
 }
 const updateTime = new Date();
 const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
@@ -62,6 +72,21 @@ items = items
 		<script>
 			import "@github/relative-time-element";
 		</script>
+		<script>
+			// Prevent body scroll when popover is open
+			document.addEventListener("DOMContentLoaded", () => {
+				const errorsPopover = document.getElementById("errors");
+				if (errorsPopover) {
+					errorsPopover.addEventListener("toggle", (e) => {
+						if (e.newState === "open") {
+							document.body.classList.add("popover-open");
+						} else {
+							document.body.classList.remove("popover-open");
+						}
+					});
+				}
+			});
+		</script>
 	</head>
 	<body class="max-w-prose mx-auto py-4 px-2 md:px-0 bg-bg text-tx space-y-4">
 		<header class="flex flex-row gap-4">
@@ -74,7 +99,7 @@ items = items
 			</div>
 			<a
 				href="https://github.com/carterworks/rss-reader"
-				class="pointer flex flex-row gap-1 items-start"
+				class="flex flex-row gap-1 items-start"
 				title="View the source code on GitHub"
 			>
 				<CodeFileIcon class="mt-1" />
@@ -82,24 +107,54 @@ items = items
 			</a>
 			<a
 				href={`${basePath}/feed.xml`}
-				class="pointer flex flex-row gap-1 items-start"
+				class="flex flex-row gap-1 items-start"
 				title="RSS/Atom Feed"
 			>
 				<BookmarkIcon class="mt-1" />
 				<span class="hidden md:inline">RSS/Atom Feed</span>
 			</a>
+			{
+				littleErrors.length > 0 && (
+					<>
+						<button
+							class="cursor-pointer flex flex-row gap-1 items-start transition-all rounded-md hover:bg-ui-2 active:bg-color-ui-3"
+							title="Show errors"
+							popovertarget="errors"
+						>
+							<BugIcon class="mt-1" />
+							<span class="hidden md:inline">{littleErrors.length} errors</span>
+						</button>
+						<div
+							id="errors"
+							popover
+							class="fixed inset-0 m-auto w-full max-w-2xl max-h-[80vh] bg-bg border border-ui-3 rounded-lg shadow-lg p-6 overflow-y-auto"
+						>
+							<h2 class="text-lg font-semibold mb-4 text-tx">Feed Errors</h2>
+							<ul class="space-y-3">
+								{littleErrors.map((error) => (
+									<li class="bg-bg-2 border border-ui-2 rounded-md p-1">
+										<div class="text-sm text-tx-2 whitespace-pre-wrap break-words font-monospace-code">
+											{error.message}
+										</div>
+									</li>
+								))}
+							</ul>
+						</div>
+					</>
+				)
+			}
 		</header>
 		<main>
 			{
-				error && (
+				bigError && (
 					<>
-						<p class="italic">Error fetching feeds: {error.message}</p>
+						<p class="italic">Error fetching feeds: {bigError.message}</p>
 						<p class="italic">Please try again later.</p>
 					</>
 				)
 			}
 			{
-				!error && (
+				!bigError && (
 					<ul class="space-y-2">
 						<li class="italic flex flex-row gap-2 items-center not-first:mt-2">
 							<hr class="grow-1 border-tx" />
