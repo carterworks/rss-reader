@@ -39,10 +39,12 @@ const hasFavicon = faviconPath
 	}
 	<div class="grow min-w-0 !mt-0">
 		<a href={item.link} class="block">
-			<h2 class="text-lg font-bold">{item.title}</h2>
+			<h2 class="text-lg font-bold">
+				{item.title ?? `A post from ${hostname ?? "somewhere"}`}
+			</h2>
 			{item.contentSnippet && <p class="truncate">{item.contentSnippet}</p>}
 			<p>
-				{item.author} • <relative-time
+				{item.creator ?? hostname} • <relative-time
 					datetime={new Date(item.pubDate ?? item.isoDate ?? "").toISOString()}
 				></relative-time>
 			</p>
