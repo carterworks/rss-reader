@@ -40,7 +40,7 @@ const hasFavicon = faviconPath
 	<div class="grow min-w-0 !mt-0">
 		<a href={item.link} class="block">
 			<h2 class="text-lg font-bold">
-				{item.title ?? `A post from ${hostname ?? "somewhere"}`}
+				{item.title ?? `A post from ${item.creator ?? hostname ?? "somewhere"}`}
 			</h2>
 			{item.contentSnippet && <p class="truncate">{item.contentSnippet}</p>}
 			<p>
