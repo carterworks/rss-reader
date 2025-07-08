@@ -17,7 +17,8 @@ const {
 
 const yazzyUrl = import.meta.env.YAZZY_URL satisfies string | undefined;
 
-const faviconUrl = `https://www.google.com/s2/favicons?domain=${item.link}`;
+const hostname = item.link ? new URL(item.link).hostname : undefined;
+const faviconUrl = hostname ? `/icon/${hostname}.ico` : undefined;
 ---
 
 <Element class={`flex flex-row gap-2 group *:mt-2 ${additionalClasses}`}>
@@ -25,6 +26,7 @@ const faviconUrl = `https://www.google.com/s2/favicons?domain=${item.link}`;
 		src={faviconUrl}
 		alt={`Favicon for ${item.link}`}
 		class="w-4 h-4 transition-all grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0"
+		loading="lazy"
 	/>
 	<div class="grow min-w-0 !mt-0">
 		<a href={item.link} class="block">
