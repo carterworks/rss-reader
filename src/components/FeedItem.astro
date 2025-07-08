@@ -1,5 +1,6 @@
 ---
 import { base } from "astro:config/client";
+import { decodeHTML } from "entities";
 import type Parser from "rss-parser";
 import ArchiveIcon from "./icons/ArchiveIcon.astro";
 import LinkIcon from "./icons/LinkIcon.astro";
@@ -16,12 +17,19 @@ const {
 	class: additionalClasses = "",
 } = Astro.props satisfies Props;
 
+function decodeHtmlEntities(text: string): string {
+	return decodeHTML(text);
+}
+
 const yazzyUrl = import.meta.env.YAZZY_URL satisfies string | undefined;
 const hostname = item.link ? new URL(item.link).hostname : undefined;
 const faviconPath = hostname ? `${base}/icon/${hostname}.ico` : undefined;
 const hasFavicon = faviconPath
 	? await fetch(new URL(faviconPath, Astro.url)).then((r) => r.ok)
 	: false;
+
+// Decode the title
+const decodedTitle = item.title ? decodeHtmlEntities(item.title) : undefined;
 ---
 
 <Element class={`flex flex-row gap-2 group *:mt-2 ${additionalClasses}`}>
@@ -40,12 +48,15 @@ const hasFavicon = faviconPath
 	<div class="grow min-w-0 !mt-0">
 		<a href={item.link} class="block">
 			<h2 class="text-lg font-bold">
-				{item.title ?? `A post from ${item.creator ?? hostname ?? "somewhere"}`}
+				{
+					decodedTitle ??
+						`A post from ${item.creator ?? hostname ?? "somewhere"}`
+				}
 			</h2>
 			{item.contentSnippet && <p class="truncate">{item.contentSnippet}</p>}
 			<p>
 				{Boolean(item.creator) && `${item.creator} • `}
-				{Boolean(hostname) && `on ${hostname} • `}
+				{Boolean(hostname) && `${hostname} • `}
 				<relative-time
 					datetime={new Date(item.pubDate ?? item.isoDate ?? "").toISOString()}
 				></relative-time>
