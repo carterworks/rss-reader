@@ -241,6 +241,7 @@
 
 	:root {
 		color-scheme: light dark;
+		@apply scroll-smooth;
 	}
 
 	a {
@@ -269,5 +270,18 @@
 	/* Prevent body scroll when popover is open */
 	body.popover-open {
 		overflow: hidden;
+	}
+
+	/* Custom animations */
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+		transform: translateY(calc(var(--spacing) * var(--distance, 4)));
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
 	}
 }
