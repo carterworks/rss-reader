@@ -1,4 +1,5 @@
 ---
+import { base } from "astro:config/client";
 import type Parser from "rss-parser";
 import ArchiveIcon from "./icons/ArchiveIcon.astro";
 import LinkIcon from "./icons/LinkIcon.astro";
@@ -16,9 +17,9 @@ const {
 } = Astro.props satisfies Props;
 
 const yazzyUrl = import.meta.env.YAZZY_URL satisfies string | undefined;
-
+console.log(`[FeedItem] base: ${base}`);
 const hostname = item.link ? new URL(item.link).hostname : undefined;
-const faviconUrl = hostname ? `/icon/${hostname}.ico` : undefined;
+const faviconUrl = hostname ? `${base}/icon/${hostname}.ico` : undefined;
 ---
 
 <Element class={`flex flex-row gap-2 group *:mt-2 ${additionalClasses}`}>
