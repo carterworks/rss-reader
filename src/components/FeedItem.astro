@@ -35,10 +35,10 @@ const decodedTitle = item.title ? decodeHtmlEntities(item.title) : undefined;
 
 <Element class={`group relative ${additionalClasses}`} {...props}>
 	<div
-		class="relative bg-bg/60 backdrop-blur-sm border border-ui-2 rounded-lg p-3 hover:bg-bg/80 hover:border-ui-3 transition-all duration-300"
+		class="relative bg-bg/60 backdrop-blur-sm border border-ui-2 md:rounded-lg p-3 hover:bg-bg/80 hover:border-ui-3 transition-all duration-300"
 	>
 		<div
-			class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-bl via-pu to-cy rounded-t-lg opacity-60"
+			class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-bl via-pu to-cy md:rounded-t-lg opacity-60"
 		>
 		</div>
 
@@ -47,16 +47,16 @@ const decodedTitle = item.title ? decodeHtmlEntities(item.title) : undefined;
 				{
 					hasFavicon ? (
 						<div class="relative">
-							<div class="absolute inset-0 bg-gradient-to-br from-bl/20 to-pu/20 rounded blur-sm" />
+							<div class="absolute inset-0 bg-gradient-to-br from-bl/20 to-pu/20 md:rounded blur-sm" />
 							<img
 								src={faviconPath}
 								alt={`Favicon for ${item.link}`}
-								class="relative w-4 h-4 transition-all duration-300 grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0 rounded-sm"
+								class="relative w-4 h-4 transition-all duration-300 grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0 md:rounded-sm"
 								loading="lazy"
 							/>
 						</div>
 					) : (
-						<div class="p-0.5 bg-gradient-to-br from-ui-2 to-ui-3 rounded border border-ui-3">
+						<div class="p-0.5 bg-gradient-to-br from-ui-2 to-ui-3 md:rounded border border-ui-3">
 							<LinkIcon title="No favicon" class="w-3 h-3 text-tx-2" />
 						</div>
 					)
@@ -112,7 +112,7 @@ const decodedTitle = item.title ? decodeHtmlEntities(item.title) : undefined;
 				<a
 					href={`https://archive.is/${item.link}`}
 					aria-label="Open in archive.is"
-					class="p-1 bg-bg-2 hover:bg-ui-2 rounded border border-ui-2 hover:border-ui-3 transition-all duration-200"
+					class="p-1 bg-bg-2 hover:bg-ui-2 md:rounded border border-ui-2 hover:border-ui-3 transition-all duration-200"
 					title="Archive this article"
 				>
 					<ArchiveIcon class="w-3 h-3 text-tx-2 hover:text-tx" />
@@ -122,7 +122,7 @@ const decodedTitle = item.title ? decodeHtmlEntities(item.title) : undefined;
 						<a
 							href={`${yazzyUrl}/${item.link}`}
 							aria-label="Open in Yazzy"
-							class="p-1 bg-bg-2 hover:bg-ui-2 rounded border border-ui-2 hover:border-ui-3 transition-all duration-200"
+							class="p-1 bg-bg-2 hover:bg-ui-2 md:rounded border border-ui-2 hover:border-ui-3 transition-all duration-200"
 							title="Open in Yazzy"
 						>
 							<LinkIcon class="w-3 h-3 text-tx-2 hover:text-tx" />

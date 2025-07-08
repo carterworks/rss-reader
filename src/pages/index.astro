@@ -91,11 +91,11 @@ items = items
 	</head>
 	<body class="min-h-screen bg-bg text-tx space-y-4 *:mx-auto *:max-w-prose">
 		<header
-			class="border-1 border-ui-3 rounded-xl p-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between"
+			class="border-1 border-ui-3 md:rounded-xl p-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between"
 		>
 			<div class="flex items-center gap-2.5 flex-3">
 				<div
-					class="p-1.5 bg-gradient-to-br from-bl to-pu rounded-lg border border-ui-3"
+					class="p-1.5 bg-gradient-to-br from-bl to-pu md:rounded-lg border border-ui-3"
 				>
 					<LayersIcon class="w-5 h-5 text-white" />
 				</div>
@@ -110,7 +110,7 @@ items = items
 			</div>
 			<div class="flex flex-wrap gap-2 flex-2">
 				<div
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 rounded-lg border border-ui-2"
+					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 md:rounded-lg border border-ui-2"
 				>
 					<DocumentIcon class="w-3.5 h-3.5 text-bl" />
 					<span class="text-xs font-medium text-tx">
@@ -120,7 +120,7 @@ items = items
 
 				<a
 					href="https://github.com/carterworks/rss-reader"
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200"
+					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 md:rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200"
 					title="View the source code on GitHub"
 				>
 					<CodeFileIcon class="w-3.5 h-3.5 text-tx-2" />
@@ -129,7 +129,7 @@ items = items
 
 				<a
 					href={`${basePath}/feed.xml`}
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200"
+					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 md:rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200"
 					title="RSS/Atom Feed"
 				>
 					<BookmarkIcon class="w-3.5 h-3.5 text-or" />
@@ -139,7 +139,7 @@ items = items
 				{
 					littleErrors.length > 0 && (
 						<button
-							class="flex cursor-pointer items-center gap-1.5 px-2.5 py-1.5 bg-re/10 hover:bg-re/20 rounded-lg border border-re/20 hover:border-re/30 transition-all duration-200"
+							class="flex cursor-pointer items-center gap-1.5 px-2.5 py-1.5 bg-re/10 hover:bg-re/20 md:rounded-lg border border-re/20 hover:border-re/30 transition-all duration-200"
 							title="Show errors"
 							popovertarget="errors"
 						>
@@ -157,17 +157,17 @@ items = items
 				<div
 					id="errors"
 					popover
-					class="fixed inset-4 m-auto w-full max-w-2xl max-h-[80vh] bg-bg/95 backdrop-blur-sm border-2 border-ui-3 rounded-2xl p-4 overflow-y-auto"
+					class="fixed inset-4 m-auto w-full max-w-2xl max-h-[80vh] bg-bg/95 backdrop-blur-sm border-2 border-ui-3 md:rounded-2xl p-4 overflow-y-auto"
 				>
 					<div class="flex items-center gap-2.5 mb-4">
-						<div class="p-1.5 bg-re/10 rounded-lg border border-re/20">
+						<div class="p-1.5 bg-re/10 md:rounded-lg border border-re/20">
 							<BugIcon class="w-4 h-4 text-re" />
 						</div>
 						<h2 class="text-lg font-semibold text-tx">Feed Errors</h2>
 					</div>
 					<div class="space-y-2">
 						{littleErrors.map((error) => (
-							<div class="bg-bg-2 border border-ui-2 rounded-lg p-3 hover:bg-ui/50 transition-colors">
+							<div class="bg-bg-2 border border-ui-2 md:rounded-lg p-3 hover:bg-ui/50 transition-colors">
 								<div class="text-xs text-tx whitespace-pre-wrap break-words font-monospace-code">
 									{error.message}
 								</div>
@@ -181,7 +181,7 @@ items = items
 		<main class="space-y-4">
 			{
 				bigError && (
-					<div class="bg-re/10 border border-re/20 rounded-xl p-4 text-center">
+					<div class="bg-re/10 border border-re/20 md:rounded-xl p-4 text-center">
 						<div class="flex items-center justify-center gap-2.5 mb-3">
 							<BugIcon class="w-5 h-5 text-re" />
 							<h2 class="text-lg font-semibold text-re">Error Loading Feeds</h2>
@@ -195,10 +195,10 @@ items = items
 			{
 				!bigError && (
 					<div class="space-y-3">
-						<div class="flex items-center gap-3 px-3 py-2 bg-bg-2/50 backdrop-blur-sm rounded-lg border border-ui-2">
+						<div class="flex items-center gap-3 px-3 py-2 bg-bg-2/50 backdrop-blur-sm md:rounded-lg border border-ui-2">
 							<div class="flex-1 h-px bg-gradient-to-r from-transparent via-ui-2 to-transparent" />
 							<div class="flex items-center gap-1.5 text-xs text-tx-2">
-								<div class="w-1.5 h-1.5 bg-gr rounded-full animate-pulse" />
+								<div class="w-1.5 h-1.5 bg-gr md:rounded-full animate-pulse" />
 								<span>
 									Last updated <relative-time datetime={updateTime} />
 								</span>
@@ -216,7 +216,7 @@ items = items
 							))}
 						</div>
 
-						<div class="flex items-center gap-3 px-3 py-2 bg-bg-2/50 backdrop-blur-sm rounded-lg border border-ui-2 mt-6">
+						<div class="flex items-center gap-3 px-3 py-2 bg-bg-2/50 backdrop-blur-sm md:rounded-lg border border-ui-2 mt-6">
 							<div class="flex-1 h-px bg-gradient-to-r from-transparent via-ui-2 to-transparent" />
 							<div class="text-xs text-center">
 								<p>That's everything from the last</p>
