@@ -26,6 +26,7 @@ const faviconUrl = hostname ? `/icon/${hostname}.ico` : undefined;
 		src={faviconUrl}
 		alt={`Favicon for ${item.link}`}
 		class="w-4 h-4 transition-all grayscale dark:invert group-hover:grayscale-0 group-hover:invert-0"
+		loading="lazy"
 	/>
 	<div class="grow min-w-0 !mt-0">
 		<a href={item.link} class="block">
