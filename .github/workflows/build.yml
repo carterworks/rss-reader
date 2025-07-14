@@ -7,9 +7,9 @@ on:
     branches: [main]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
-  # Build every 6 hours
+  # Build every 2 hours
   schedule:
-    - cron: "0 */6 * * *" # At minute 0 past every 6th hour.
+    - cron: "0 */2 * * *" # At minute 0 past every 2nd hour.
 
 
 
