@@ -7,6 +7,7 @@ import DocumentIcon from "../components/icons/DocumentIcon.astro";
 import "../styles/global.css";
 import BugIcon from "../components/icons/BugIcon.astro";
 import LayersIcon from "../components/icons/LayersIcon.astro";
+import NewsIcon from "../components/icons/NewsIcon.astro";
 import { fetchFeedData } from "../lib/feedData";
 
 const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
@@ -15,7 +16,7 @@ const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
 
 const basePath = import.meta.env.BASE_URL satisfies string | undefined;
 
-type FeedItemType = Parser.Item & {updated?: string; isoDate?: string};
+type FeedItemType = Parser.Item & { updated?: string; isoDate?: string };
 
 async function getAllFeedItems(): Promise<{
 	sources: string[];
@@ -101,7 +102,7 @@ items = items
 				<div
 					class="p-1.5 bg-gradient-to-br from-bl to-pu md:rounded-lg border border-ui-3"
 				>
-					<LayersIcon class="w-5 h-5 text-white" />
+					<NewsIcon class="w-5 h-5 text-white" />
 				</div>
 				<hgroup>
 					<h1
@@ -114,7 +115,7 @@ items = items
 			</div>
 			<div class="flex flex-wrap gap-2 flex-2">
 				<div
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 md:rounded-lg border border-ui-2"
+					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 rounded-lg border border-ui-2"
 				>
 					<DocumentIcon class="w-3.5 h-3.5 text-bl" />
 					<span class="text-xs font-medium text-tx">
@@ -125,7 +126,7 @@ items = items
 
 				<a
 					href="https://github.com/carterworks/rss-reader"
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 md:rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200"
+					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200"
 					title="View the source code on GitHub"
 				>
 					<CodeFileIcon class="w-3.5 h-3.5 text-tx-2" />
@@ -134,7 +135,7 @@ items = items
 
 				<a
 					href={`${basePath}/feed.xml`}
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 md:rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200"
+					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200"
 					title="RSS/Atom Feed"
 				>
 					<BookmarkIcon class="w-3.5 h-3.5 text-or" />
@@ -144,7 +145,7 @@ items = items
 				{
 					littleErrors.length > 0 && (
 						<button
-							class="flex cursor-pointer items-center gap-1.5 px-2.5 py-1.5 bg-re/10 hover:bg-re/20 md:rounded-lg border border-re/20 hover:border-re/30 transition-all duration-200"
+							class="flex cursor-pointer items-center gap-1.5 px-2.5 py-1.5 bg-re/10 hover:bg-re/20 rounded-lg border border-re/20 hover:border-re/30 transition-all duration-200"
 							title="Show errors"
 							popovertarget="errors"
 						>
