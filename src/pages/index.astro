@@ -15,25 +15,29 @@ const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
 
 const basePath = import.meta.env.BASE_URL satisfies string | undefined;
 
-type FeedItemType = Parser.Item & { updated?: string; isoDate?: string };
+type FeedItemType = Parser.Item & {updated?: string; isoDate?: string};
 
 async function getAllFeedItems(): Promise<{
+	sources: string[];
 	items: FeedItemType[];
 	errors: Error[];
 }> {
 	const data = await fetchFeedData();
 	return {
+		sources: data.sources,
 		items: data.feeds.flatMap((f) => f.items) as FeedItemType[],
 		errors: data.errors,
 	};
 }
 let items: FeedItemType[] | undefined;
 let bigError: Error | undefined;
+let sourceCount: number | undefined;
 let littleErrors: Error[] = [];
 try {
 	const data = await getAllFeedItems();
 	littleErrors = data.errors;
 	items = data.items;
+	sourceCount = data.sources.length;
 } catch (err) {
 	console.error("[index.astro] Error fetching/parsing feeds:", err);
 	bigError = err as Error;
@@ -114,7 +118,8 @@ items = items
 				>
 					<DocumentIcon class="w-3.5 h-3.5 text-bl" />
 					<span class="text-xs font-medium text-tx">
-						{items?.length}<span class="hidden sm:inline ml-1">items</span>
+						{items?.length}<span class="hidden sm:inline ml-1">items</span>,
+						{sourceCount}<span class="hidden sm:inline ml-1">sources</span>
 					</span>
 				</div>
 

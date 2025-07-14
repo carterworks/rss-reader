@@ -1,6 +1,8 @@
 import Parser from "rss-parser";
 
 export interface FeedDataResult {
+	/** The URLs of the feeds that were fetched */
+	sources: string[];
 	/** Successfully parsed feeds */
 	feeds: Parser.Output<unknown>[];
 	/** Any errors encountered while fetching/parsing feeds */
@@ -10,7 +12,7 @@ export interface FeedDataResult {
 let cachedFeedPromise: Promise<FeedDataResult> | undefined;
 
 function getFeedUrls(): string[] {
-	const feedsEnv: string = import.meta.env.FEEDS ?? "" satisfies string;
+	const feedsEnv: string = import.meta.env.FEEDS ?? ("" satisfies string);
 	return feedsEnv
 		.split(/\s*,\s*/)
 		.map((url) => url.trim())
@@ -53,6 +55,7 @@ async function getFeed(): Promise<FeedDataResult> {
 		.map((r) => r.reason as Error);
 
 	return {
+		sources: feedUrls,
 		feeds,
 		errors,
 	} satisfies FeedDataResult;
