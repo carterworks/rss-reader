@@ -19,7 +19,7 @@ https://blog.example.org/atom.xml'
 ```
 
 ### `YAZZY_URL`
-**Optional** - Base URL for the Yazzy service. When provided, adds "Open in Yazzy" links to feed items.
+**Optional** - Base URL for the [Yazzy service](https://github.com/carterworks/yazzy). When provided, adds "Open in Yazzy" links to feed items.
 
 **Example:**
 ```
