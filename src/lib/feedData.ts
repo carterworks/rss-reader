@@ -1,10 +1,6 @@
 import Parser from "rss-parser";
 
 export interface FeedDataResult {
-	/** Original categories object from the FEEDS env var */
-	categories: Record<string, string[]>;
-	/** Map of feedUrl -> category */
-	feedToCategoryMap: Map<string, string>;
 	/** Successfully parsed feeds */
 	feeds: Parser.Output<unknown>[];
 	/** Any errors encountered while fetching/parsing feeds */
@@ -13,8 +9,12 @@ export interface FeedDataResult {
 
 let cachedFeedPromise: Promise<FeedDataResult> | undefined;
 
-function getFeedCategories(): Record<string, string[]> {
-	return JSON.parse(import.meta.env.FEEDS ?? "{}");
+function getFeedUrls(): string[] {
+	const feedsEnv: string = import.meta.env.FEEDS ?? "" satisfies string;
+	return feedsEnv
+		.split(/\s*,\s*/)
+		.map((url) => url.trim())
+		.filter((url) => url.length > 0);
 }
 
 /** Utility type guard for Promise.allSettled */
@@ -25,36 +25,26 @@ function isFulfilled<T>(
 }
 
 async function getFeed(): Promise<FeedDataResult> {
-	const categories = getFeedCategories();
-
-	// Build quick lookup of feed URL -> category
-	const feedToCategoryMap = new Map<string, string>();
-	for (const [category, feeds] of Object.entries(categories)) {
-		for (const feed of feeds) {
-			feedToCategoryMap.set(feed, category);
-		}
-	}
+	const feedUrls = getFeedUrls();
 
 	const parser = new Parser();
-	const feedPromises = Object.values(categories)
-		.flat()
-		.map(async (feedUrl) => {
-			try {
-				const feed = await parser.parseURL(feedUrl);
-				return feed;
-			} catch (e) {
-				let err: Error;
-				if (typeof e === "string") {
-					err = new Error(e);
-				} else if (!(e instanceof Error)) {
-					err = new Error(`${e}`);
-				} else {
-					err = e;
-				}
-				err.message = `[${feedUrl}] ${err.message ?? e}`;
-				throw err;
+	const feedPromises = feedUrls.map(async (feedUrl) => {
+		try {
+			const feed = await parser.parseURL(feedUrl);
+			return feed;
+		} catch (e) {
+			let err: Error;
+			if (typeof e === "string") {
+				err = new Error(e);
+			} else if (!(e instanceof Error)) {
+				err = new Error(`${e}`);
+			} else {
+				err = e;
 			}
-		});
+			err.message = `[${feedUrl}] ${err.message ?? e}`;
+			throw err;
+		}
+	});
 
 	const results = await Promise.allSettled(feedPromises);
 	const feeds = results.filter(isFulfilled).map((r) => r.value);
@@ -63,8 +53,6 @@ async function getFeed(): Promise<FeedDataResult> {
 		.map((r) => r.reason as Error);
 
 	return {
-		categories,
-		feedToCategoryMap,
 		feeds,
 		errors,
 	} satisfies FeedDataResult;

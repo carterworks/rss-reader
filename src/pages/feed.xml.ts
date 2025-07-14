@@ -6,8 +6,7 @@ function xmlEncode(str: string) {
 }
 
 export const GET: import("astro").APIRoute = async ({ request, generator }) => {
-	const { categories, feedToCategoryMap, feeds, errors } =
-		await fetchFeedData();
+	const { feeds, errors } = await fetchFeedData();
 
 	console.log(
 		`[feed.xml.ts] Using cached feed data: ${feeds.length} feeds (${errors.length} errors)`,
@@ -19,7 +18,7 @@ export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 	);
 	const feed = new Feed({
 		title: "Carter's RSS Feeds",
-		description: `A collection of RSS feeds that Carter follows. Contains feeds from ${feedToCategoryMap.size} sources.`,
+		description: `A collection of RSS feeds that Carter follows. Contains feeds from ${feeds.length} sources.`,
 		id: `tag:${new URL(request.url).hostname},${new Date().toISOString().slice(0, 10)}:feed`,
 		link: request.url,
 		language: "en-US",
@@ -35,16 +34,8 @@ export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 		},
 	});
 
-	// Add categories to the main feed
-	for (const category of Object.keys(categories)) {
-		feed.addCategory(xmlEncode(category));
-	}
-
 	let totalItemsAdded = 0;
 	for (const f of feeds) {
-		const feedCategory =
-			feedToCategoryMap.get(f.feedUrl ?? f.link ?? "") ?? "Uncategorized";
-
 		for (const e of f.items) {
 			let title = e.title;
 			if (!title && !f.title) {
@@ -89,12 +80,6 @@ export const GET: import("astro").APIRoute = async ({ request, generator }) => {
 						: e.isoDate
 							? new Date(e.isoDate)
 							: new Date(),
-					category: [
-						{
-							name: xmlEncode(feedCategory),
-							term: xmlEncode(feedCategory),
-						},
-					],
 				});
 				totalItemsAdded++;
 			} catch (itemError) {
