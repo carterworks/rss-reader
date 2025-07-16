@@ -1,4 +1,3 @@
-import { decodeHTML } from "entities";
 import Parser from "rss-parser";
 
 export interface FeedDataResult {

@@ -2,36 +2,44 @@
 
 @theme {
 	--font-system: system-ui, sans-serif;
-	--font-transitional: charter, "Bitstream Charter", "Sitka Text", cambria,
-		serif;
-	--font-old-style: "Iowan Old Style", "Palatino Linotype", "URW Palladio L",
-		p052, serif;
-	--font-humanist: seravek, "Gill Sans Nova", ubuntu, calibri, "DejaVu Sans",
-		source-sans-pro, sans-serif;
-	--font-gemoetric-humanist: avenir, montserrat, corbel, "URW Gothic",
-		source-sans-pro, sans-serif;
-	--font-classical-humanist: optima, candara, "Noto Sans", source-sans-pro,
+	--font-transitional:
+		charter, "Bitstream Charter", "Sitka Text", cambria, serif;
+	--font-old-style:
+		"Iowan Old Style", "Palatino Linotype", "URW Palladio L", p052, serif;
+	--font-humanist:
+		seravek, "Gill Sans Nova", ubuntu, calibri, "DejaVu Sans", source-sans-pro,
 		sans-serif;
-	--font-neo-grotesque: inter, roboto, "Helvetica Neue", "Arial Nova",
-		"Nimbus Sans", arial, sans-serif;
+	--font-gemoetric-humanist:
+		avenir, montserrat, corbel, "URW Gothic", source-sans-pro, sans-serif;
+	--font-classical-humanist:
+		optima, candara, "Noto Sans", source-sans-pro, sans-serif;
+	--font-neo-grotesque:
+		inter, roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans", arial,
+		sans-serif;
 	--font-monospace-slab-serif: "Nimbus Mono PS", "Courier New", monospace;
-	--font-monospace-code: ui-monospace, "Cascadia Code", "Source Code Pro", menlo,
-		consolas, "DejaVu Sans Mono", monospace;
-	--font-industrial: bahnschrift, "DIN Alternate", "Franklin Gothic Medium",
-		"Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
-	--font-rounded-sans: ui-rounded, "Hiragino Maru Gothic ProN", quicksand,
-		comfortaa, manjari, "Arial Rounded MT", "Arial Rounded MT Bold", calibri,
-		source-sans-pro, sans-serif;
-	--font-slab-serif: rockwell, "Rockwell Nova", "Roboto Slab", "DejaVu Serif",
-		"Sitka Small", serif;
-	--font-antique: superclarendon, "Bookman Old Style", "URW Bookman",
-		"URW Bookman L", "Georgia Pro", georgia, serif;
-	--font-didone: didot, "Bodoni MT", "Noto Serif Display", "URW Palladio L",
-		p052, sylfaen, serif;
-	--font-handwritten: "Segoe Print", "Bradley Hand", chilanka, tscu_comic,
-		casual, cursive;
-	--font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-		"Noto Color Emoji";
+	--font-monospace-code:
+		ui-monospace, "Cascadia Code", "Source Code Pro", menlo, consolas,
+		"DejaVu Sans Mono", monospace;
+	--font-industrial:
+		bahnschrift, "DIN Alternate", "Franklin Gothic Medium", "Nimbus Sans Narrow",
+		sans-serif-condensed, sans-serif;
+	--font-rounded-sans:
+		ui-rounded, "Hiragino Maru Gothic ProN", quicksand, comfortaa, manjari,
+		"Arial Rounded MT", "Arial Rounded MT Bold", calibri, source-sans-pro,
+		sans-serif;
+	--font-slab-serif:
+		rockwell, "Rockwell Nova", "Roboto Slab", "DejaVu Serif", "Sitka Small",
+		serif;
+	--font-antique:
+		superclarendon, "Bookman Old Style", "URW Bookman", "URW Bookman L",
+		"Georgia Pro", georgia, serif;
+	--font-didone:
+		didot, "Bodoni MT", "Noto Serif Display", "URW Palladio L", p052, sylfaen,
+		serif;
+	--font-handwritten:
+		"Segoe Print", "Bradley Hand", chilanka, tscu_comic, casual, cursive;
+	--font-emoji:
+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 	/* #region Flexoki https://stephango.com/flexoki */
 	/* Base */
@@ -260,25 +268,30 @@
 	}
 	[popover] {
 		@apply text-tx bg-bg opacity-0 scale-0;
-		transition: opacity 0.1s, transform 0.1s, overlay 0.1s allow-discrete, display 0.1s allow-discrete;
+		transition:
+			opacity 0.1s,
+			transform 0.1s,
+			overlay 0.1s allow-discrete,
+			display 0.1s allow-discrete;
 	}
 
 	[popover]::backdrop {
 		@apply bg-bg/0 backdrop-blur-none;
-		transition: display 0.1s allow-discrete, overlay 0.1s allow-discrete,
-			background-color 0.1s, backdrop-filter 0.1s;
+		transition:
+			display 0.1s allow-discrete,
+			overlay 0.1s allow-discrete,
+			background-color 0.1s,
+			backdrop-filter 0.1s;
 	}
 	[popover]:popover-open::backdrop {
 		@apply bg-bg/50 backdrop-blur-sm;
 	}
-	@supports (selector(@starting-style)) {
-		@starting-style {
-			[popover]:popover-open {
-				@apply opacity-0 scale-0;
-			}
-			[popover]:popover-open::backdrop {
-				@apply bg-bg/0 backdrop-blur-none;
-			}
+	@starting-style {
+		[popover]:popover-open {
+			@apply opacity-0 scale-0;
+		}
+		[popover]:popover-open::backdrop {
+			@apply bg-bg/0 backdrop-blur-none;
 		}
 	}
 
