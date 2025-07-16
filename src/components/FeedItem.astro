@@ -45,7 +45,19 @@ const linkAttrs = {
 
 <Element class={`group relative ${additionalClasses}`} {...props}>
 	<div
-		class="relative bg-bg/60 backdrop-blur-sm border border-ui-2 md:rounded-lg p-3 hover:bg-bg/80 hover:border-ui-3 transition-all duration-300"
+		class:list={[
+			"relative",
+			"bg-bg/60",
+			"backdrop-blur-sm",
+			"border",
+			"border-ui-2",
+			"md:rounded-lg",
+			"p-3",
+			"hover:bg-bg/80",
+			"hover:border-ui-3",
+			"transition-all",
+			"duration-300",
+		]}
 	>
 		<div
 			class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-bl via-pu to-cy md:rounded-t-lg opacity-60"

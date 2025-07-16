@@ -255,12 +255,31 @@
 	}
 
 	/* Popover styling */
+	[popover]:popover-open {
+		@apply opacity-100 scale-100;
+	}
 	[popover] {
-		@apply text-tx bg-bg;
+		@apply text-tx bg-bg opacity-0 scale-0;
+		transition: opacity 0.1s, transform 0.1s, overlay 0.1s allow-discrete, display 0.1s allow-discrete;
 	}
 
 	[popover]::backdrop {
-		@apply bg-black/50 backdrop-blur-sm;
+		@apply bg-bg/0 backdrop-blur-none;
+		transition: display 0.1s allow-discrete, overlay 0.1s allow-discrete,
+			background-color 0.1s, backdrop-filter 0.1s;
+	}
+	[popover]:popover-open::backdrop {
+		@apply bg-bg/50 backdrop-blur-sm;
+	}
+	@supports (selector(@starting-style)) {
+		@starting-style {
+			[popover]:popover-open {
+				@apply opacity-0 scale-0;
+			}
+			[popover]:popover-open::backdrop {
+				@apply bg-bg/0 backdrop-blur-none;
+			}
+		}
 	}
 
 	.prose {
@@ -420,5 +439,17 @@
 	to {
 		opacity: 1;
 		transform: translateY(0);
+	}
+}
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
 	}
 }
