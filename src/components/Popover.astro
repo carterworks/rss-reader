@@ -1,0 +1,14 @@
+---
+const { class: className, ...props } = Astro.props;
+---
+
+<dialog
+	class={`fixed inset-4 m-auto w-full max-w-2xl max-h-[80vh] bg-bg/95 backdrop-blur-sm border-2 border-ui-3 md:rounded-2xl p-4 overflow-y-auto ${className}`}
+	role="dialog"
+	aria-modal="true"
+	aria-label="Popover"
+	popover
+	{...props}
+>
+	<slot />
+</dialog>

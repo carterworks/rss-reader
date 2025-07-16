@@ -1,3 +1,4 @@
+import { decodeHTML } from "entities";
 import Parser from "rss-parser";
 
 export interface FeedDataResult {
@@ -26,6 +27,15 @@ function isFulfilled<T>(
 	return result.status === "fulfilled";
 }
 
+function grokFeedItem(item: Parser.Item): Parser.Item {
+	const hostname = item.link ? new URL(item.link).hostname : undefined;
+	return {
+		...item,
+		title:
+			item.title ?? `A post from ${item.creator ?? hostname ?? "somewhere"}`,
+	};
+}
+
 async function getFeed(): Promise<FeedDataResult> {
 	const feedUrls = getFeedUrls();
 
@@ -33,7 +43,10 @@ async function getFeed(): Promise<FeedDataResult> {
 	const feedPromises = feedUrls.map(async (feedUrl) => {
 		try {
 			const feed = await parser.parseURL(feedUrl);
-			return feed;
+			return {
+				...feed,
+				items: feed.items.map(grokFeedItem),
+			};
 		} catch (e) {
 			let err: Error;
 			if (typeof e === "string") {

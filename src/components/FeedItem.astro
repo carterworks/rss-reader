@@ -1,9 +1,11 @@
 ---
 import { base } from "astro:config/client";
-import { decodeHTML } from "entities";
 import type Parser from "rss-parser";
+import Popover from "./Popover.astro";
 import ArchiveIcon from "./icons/ArchiveIcon.astro";
+import BookIcon from "./icons/BookIcon.astro";
 import LinkIcon from "./icons/LinkIcon.astro";
+import SquareTopDownIcon from "./icons/SquareTopDownIcon.astro";
 
 interface Props {
 	item: Parser.Item;
@@ -18,10 +20,6 @@ const {
 	...props
 } = Astro.props satisfies Props;
 
-function decodeHtmlEntities(text: string): string {
-	return decodeHTML(text);
-}
-
 const yazzyUrl = import.meta.env.YAZZY_URL satisfies string | undefined;
 const hostname = item.link ? new URL(item.link).hostname : undefined;
 const faviconPath = hostname ? `${base}/icon/${hostname}.ico` : undefined;
@@ -29,8 +27,21 @@ const hasFavicon = faviconPath
 	? await fetch(new URL(faviconPath, Astro.url)).then((r) => r.ok)
 	: false;
 
-// Decode the title
-const decodedTitle = item.title ? decodeHtmlEntities(item.title) : undefined;
+const shouldUsePopover =
+	item.content && item.content.toString().trim().length > 0;
+const linkAttrs = {
+	el: shouldUsePopover ? "button" : "a",
+	props: shouldUsePopover
+		? {
+				popovertarget: `rss-contents-${item.link}`,
+				ariaLabel: "Read article",
+			}
+		: {
+				href: item.link,
+				rel: "noopener noreferrer",
+				target: "_blank",
+			},
+};
 ---
 
 <Element class={`group relative ${additionalClasses}`} {...props}>
@@ -63,22 +74,18 @@ const decodedTitle = item.title ? decodeHtmlEntities(item.title) : undefined;
 				}
 			</div>
 			<div class="flex-1 min-w-0">
-				<a
-					href={item.link}
-					class="block group-hover:text-bl transition-colors duration-200"
+				<linkAttrs.el
+					{...linkAttrs.props}
+					class="block group-hover:text-bl transition-colors duration-200 text-left cursor-pointer rounded-md hover:bg-ui-2 w-full"
 				>
 					<h2
 						class="text-base font-semibold leading-tight mb-1 group-hover:text-bl transition-colors duration-200"
-					>
-						{
-							decodedTitle ??
-								`A post from ${item.creator ?? hostname ?? "somewhere"}`
-						}
-					</h2>
+						set:html={item.title}
+					/>
 					{
-						item.contentSnippet && (
+						(item.contentSnippet ?? item.content) && (
 							<p class="text-tx text-xs leading-relaxed mb-2 line-clamp-2">
-								{item.contentSnippet}
+								{item.contentSnippet ?? item.content}
 							</p>
 						)
 					}
@@ -105,13 +112,15 @@ const decodedTitle = item.title ? decodeHtmlEntities(item.title) : undefined;
 							).toISOString()}
 							class="text-tx-2"></relative-time>
 					</div>
-				</a>
+				</linkAttrs.el>
 			</div>
 
 			<div class="flex items-start gap-1">
 				<a
 					href={`https://archive.is/${item.link}`}
 					aria-label="Open in archive.is"
+					rel="noopener noreferrer"
+					target="_blank"
 					class="p-1 bg-bg-2 hover:bg-ui-2 md:rounded border border-ui-2 hover:border-ui-3 transition-all duration-200"
 					title="Archive this article"
 				>
@@ -122,6 +131,8 @@ const decodedTitle = item.title ? decodeHtmlEntities(item.title) : undefined;
 						<a
 							href={`${yazzyUrl}/${item.link}`}
 							aria-label="Open in Yazzy"
+							rel="noopener noreferrer"
+							target="_blank"
 							class="p-1 bg-bg-2 hover:bg-ui-2 md:rounded border border-ui-2 hover:border-ui-3 transition-all duration-200"
 							title="Open in Yazzy"
 						>
@@ -131,5 +142,13 @@ const decodedTitle = item.title ? decodeHtmlEntities(item.title) : undefined;
 				}
 			</div>
 		</div>
+		<Popover id={`rss-contents-${item.link}`}>
+			<div class="p-4">
+				<h3 class="text-base font-semibold leading-tight mb-2">
+					{item.title}
+				</h3>
+				<article class="text-sm text-tx-2" set:html={item.content} />
+			</div>
+		</Popover>
 	</div>
 </Element>

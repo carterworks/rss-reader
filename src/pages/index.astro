@@ -6,6 +6,7 @@ import BookmarkIcon from "../components/icons/BookmarkIcon.astro";
 import CodeFileIcon from "../components/icons/CodeFileIcon.astro";
 import DocumentIcon from "../components/icons/DocumentIcon.astro";
 import "../styles/global.css";
+import Popover from "../components/Popover.astro";
 import BugIcon from "../components/icons/BugIcon.astro";
 import LayersIcon from "../components/icons/LayersIcon.astro";
 import LinkIcon from "../components/icons/LinkIcon.astro";
@@ -131,7 +132,7 @@ items = items
 			<div class="flex flex-wrap gap-2 flex-2">
 				<button
 					popovertarget="sources"
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 rounded-lg border border-ui-2"
+					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer"
 				>
 					<DocumentIcon class="w-3.5 h-3.5 text-bl" />
 					<span class="text-xs font-medium text-tx">
@@ -174,11 +175,7 @@ items = items
 				}
 			</div>
 		</header>
-		<div
-			id="sources"
-			popover
-			class="fixed inset-4 m-auto w-full max-w-2xl max-h-[80vh] bg-bg/95 backdrop-blur-sm border-2 border-ui-3 md:rounded-2xl p-4 overflow-y-auto"
-		>
+		<Popover id="sources">
 			<div class="flex items-center gap-2.5 mb-4">
 				<div class="p-1.5 bg-gr/10 md:rounded-lg border border-gr/20">
 					<LayersIcon class="w-4 h-4 text-gr" />
@@ -209,14 +206,10 @@ items = items
 					))
 				}
 			</ul>
-		</div>
+		</Popover>
 		{
 			littleErrors.length > 0 && (
-				<div
-					id="errors"
-					popover
-					class="fixed inset-4 m-auto w-full max-w-2xl max-h-[80vh] bg-bg/95 backdrop-blur-sm border-2 border-ui-3 md:rounded-2xl p-4 overflow-y-auto"
-				>
+				<Popover id="errors">
 					<div class="flex items-center gap-2.5 mb-4">
 						<div class="p-1.5 bg-re/10 md:rounded-lg border border-re/20">
 							<BugIcon class="w-4 h-4 text-re" />
@@ -232,7 +225,7 @@ items = items
 							</div>
 						))}
 					</div>
-				</div>
+				</Popover>
 			)
 		}
 
