@@ -174,60 +174,60 @@ items = items
 					)
 				}
 			</div>
-		</header>
-		<Popover id="sources">
-			<div class="flex items-center gap-2.5 mb-4">
-				<div class="p-1.5 bg-gr/10 md:rounded-lg border border-gr/20">
-					<LayersIcon class="w-4 h-4 text-gr" />
+			<Popover id="sources">
+				<div class="flex items-center gap-2.5 mb-4">
+					<div class="p-1.5 bg-gr/10 md:rounded-lg border border-gr/20">
+						<LayersIcon class="w-4 h-4 text-gr" />
+					</div>
+					<h2 class="text-lg font-semibold text-tx">Sources</h2>
 				</div>
-				<h2 class="text-lg font-semibold text-tx">Sources</h2>
-			</div>
-			<ul role="list" class="space-y-2">
-				{
-					sources.map((source) => (
-						<li class="bg-bg-2 border border-ui-2 md:rounded-lg p-3 hover:bg-ui/50 transition-colors">
-							<a
-								href={source}
-								class="text-xs text-tx whitespace-pre-wrap break-words font-monospace-code flex items-center gap-2"
-							>
-								{sourceFaviconMap.has(source) ? (
-									<img
-										src={`${base}/icon/${sourceFaviconMap.get(source)}.ico`}
-										alt={`Favicon for ${source}`}
-										class="w-4 h-4 dark:invert"
-										loading="lazy"
-									/>
-								) : (
-									<LinkIcon title="No favicon" class="w-3 h-3 text-tx-2" />
-								)}
-								<span>{source}</span>
-							</a>
-						</li>
-					))
-				}
-			</ul>
-		</Popover>
-		{
-			littleErrors.length > 0 && (
-				<Popover id="errors">
-					<div class="flex items-center gap-2.5 mb-4">
-						<div class="p-1.5 bg-re/10 md:rounded-lg border border-re/20">
-							<BugIcon class="w-4 h-4 text-re" />
-						</div>
-						<h2 class="text-lg font-semibold text-tx">Feed Errors</h2>
-					</div>
-					<div class="space-y-2">
-						{littleErrors.map((error) => (
-							<div class="bg-bg-2 border border-ui-2 md:rounded-lg p-3 hover:bg-ui/50 transition-colors">
-								<div class="text-xs text-tx whitespace-pre-wrap break-words font-monospace-code">
-									{error.message}
-								</div>
+				<ul role="list" class="space-y-2">
+					{
+						sources.map((source) => (
+							<li class="bg-bg-2 border border-ui-2 md:rounded-lg p-3 hover:bg-ui/50 transition-colors">
+								<a
+									href={source}
+									class="text-xs text-tx whitespace-pre-wrap break-words font-monospace-code flex items-center gap-2"
+								>
+									{sourceFaviconMap.has(source) ? (
+										<img
+											src={`${base}/icon/${sourceFaviconMap.get(source)}.ico`}
+											alt={`Favicon for ${source}`}
+											class="w-4 h-4 dark:invert"
+											loading="lazy"
+										/>
+									) : (
+										<LinkIcon title="No favicon" class="w-3 h-3 text-tx-2" />
+									)}
+									<span>{source}</span>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</Popover>
+			{
+				littleErrors.length > 0 && (
+					<Popover id="errors">
+						<div class="flex items-center gap-2.5 mb-4">
+							<div class="p-1.5 bg-re/10 md:rounded-lg border border-re/20">
+								<BugIcon class="w-4 h-4 text-re" />
 							</div>
-						))}
-					</div>
-				</Popover>
-			)
-		}
+							<h2 class="text-lg font-semibold text-tx">Feed Errors</h2>
+						</div>
+						<div class="space-y-2">
+							{littleErrors.map((error) => (
+								<div class="bg-bg-2 border border-ui-2 md:rounded-lg p-3 hover:bg-ui/50 transition-colors">
+									<div class="text-xs text-tx whitespace-pre-wrap break-words font-monospace-code">
+										{error.message}
+									</div>
+								</div>
+							))}
+						</div>
+					</Popover>
+				)
+			}
+		</header>
 
 		<main class="space-y-4">
 			{

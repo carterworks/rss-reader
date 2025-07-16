@@ -254,10 +254,6 @@
 		background-color: var(--color-ui-3);
 	}
 
-	::backdrop {
-		@apply sepia brightness-50 overflow-hidden;
-	}
-
 	/* Popover styling */
 	[popover] {
 		@apply text-tx bg-bg;
@@ -267,12 +263,153 @@
 		@apply bg-black/50 backdrop-blur-sm;
 	}
 
-	/* Prevent body scroll when popover is open */
-	body.popover-open {
-		overflow: hidden;
-	}
+	.prose {
+		@apply leading-normal max-w-prose;
+		* {
+			@apply max-w-prose;
+		}
+		tab-size: 2;
 
-	/* Custom animations */
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			@apply font-didone scroll-mt-32 font-bold text-balance;
+			@variant lg {
+				@apply scroll-mt-18;
+			}
+		}
+		h2 {
+			@apply text-lg;
+		}
+		h3 {
+			@apply text-base;
+		}
+		h4 {
+			@apply text-sm;
+		}
+		a:not(:is(code, pre, h1, h2, h3, h4, h5, h6) *):not(:has(img)):not(:empty) {
+			@apply break-words transition-colors rounded;
+			&:hover {
+				@apply bg-base-100 dark:bg-base-800;
+			}
+			&::after {
+				content: "*";
+				@apply text-blue-600 dark:text-blue-300 relative -top-0.25;
+			}
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				display: inline;
+			}
+		}
+		* + *:not(:is(code, pre, h1, h2, h3, h4, h5, h6, details) *) {
+			@apply mt-[1lh];
+		}
+		:is(h2, h3, h4) + * {
+			@apply mt-[0.3lh];
+		}
+		img,
+		figure {
+			@apply mx-auto max-w-full rounded;
+			figcaption {
+				@apply text-center text-pretty hyphens-auto text-sm italic opacity-75 mt-1;
+			}
+		}
+		&,
+		& p {
+			@apply text-pretty hyphens-auto;
+		}
+		ul,
+		ol {
+			@apply list-outside list-disc pl-6;
+			li {
+				@apply pl-3 mt-0;
+			}
+		}
+		ol {
+			@apply list-decimal;
+		}
+		code {
+			@apply font-mono font-medium;
+			font-variant-ligatures: none;
+		}
+		pre:has(code) {
+			@apply overflow-x-auto text-xs max-w-full rounded;
+		}
+		table {
+			@apply w-full my-8 leading-6 text-sm;
+			thead {
+				@apply border-b;
+				th {
+					@apply font-medium align-bottom pb-3 px-2;
+				}
+				th:first-child {
+					@apply pl-0;
+				}
+				th:last-child {
+					@apply pr-0;
+				}
+			}
+			tbody {
+				tr {
+					@apply border-b;
+				}
+				td:last-child {
+					@apply border-b-0;
+				}
+				td {
+					@apply align-baseline;
+				}
+				tfoot {
+					@apply border-t;
+					td {
+						@apply align-top;
+					}
+				}
+			}
+			th,
+			td {
+				@apply text-start;
+			}
+			tbody,
+			tfoot {
+				td {
+					@apply px-2 py-1.5;
+				}
+				td:first-child {
+					@apply pl-0;
+				}
+				td:last-child {
+					@apply pr-0;
+				}
+			}
+		}
+		blockquote {
+			@apply italic border-l-2 border-l-base-300 pl-1;
+			p:first-of-type::before {
+				content: open-quote;
+			}
+			p:last-of-type::after {
+				content: close-quote;
+			}
+		}
+		:first-child {
+			@apply mt-0;
+		}
+		:last-child {
+			@apply mb-0;
+		}
+		/* It's 2025, I don't respect the <center> tag */
+		center {
+			@apply text-left;
+		}
+	}
 }
 
 @keyframes fade-in {

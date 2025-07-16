@@ -2,8 +2,8 @@
 const { class: className, ...props } = Astro.props;
 ---
 
-<dialog
-	class={`fixed inset-4 m-auto w-full max-w-2xl max-h-[80vh] bg-bg/95 backdrop-blur-sm border-2 border-ui-3 md:rounded-2xl p-4 overflow-y-auto ${className}`}
+<div
+	class={`fixed inset-4 m-auto w-full max-w-[min(90vw,40rem)] max-h-[80vh] bg-bg/95 backdrop-blur-sm rounded-md border-2 border-ui-3 p-4 overflow-y-auto ${className}`}
 	role="dialog"
 	aria-modal="true"
 	aria-label="Popover"
@@ -11,4 +11,4 @@ const { class: className, ...props } = Astro.props;
 	{...props}
 >
 	<slot />
-</dialog>
+</div>

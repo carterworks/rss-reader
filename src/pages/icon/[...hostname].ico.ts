@@ -6,8 +6,8 @@ export const getStaticPaths: import("astro").GetStaticPaths = async () => {
 		new Set(
 			feeds
 				.flatMap((f) => f.items)
-				.map((i) => new URL(i.link ?? "").hostname)
-				.filter(Boolean),
+				.filter((i) => Boolean(i.link))
+				.map((i) => new URL(i.link as string).hostname),
 		),
 	);
 	return itemLinks.map((link) => ({
