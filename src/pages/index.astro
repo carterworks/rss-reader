@@ -6,11 +6,11 @@ import BookmarkIcon from "../components/icons/BookmarkIcon.astro";
 import CodeFileIcon from "../components/icons/CodeFileIcon.astro";
 import DocumentIcon from "../components/icons/DocumentIcon.astro";
 import "../styles/global.css";
+import Dialog from "../components/Dialog.astro";
 import BugIcon from "../components/icons/BugIcon.astro";
 import LayersIcon from "../components/icons/LayersIcon.astro";
 import LinkIcon from "../components/icons/LinkIcon.astro";
 import NewsIcon from "../components/icons/NewsIcon.astro";
-import Popover from "../components/Popover.astro";
 import { fetchFeedData } from "../lib/feedData";
 
 const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
@@ -117,9 +117,7 @@ items = items
 			class="border-1 border-ui-3 md:rounded-xl p-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between"
 		>
 			<div class="flex items-center gap-2.5 flex-3">
-				<div
-					class="p-1.5 bg-gradient-to-br from-bl to-pu md:rounded-lg border border-ui-3"
-				>
+				<div class="p-1.5 bg-gradient-to-br from-bl to-pu border border-ui-3">
 					<NewsIcon class="w-5 h-5 text-white" />
 				</div>
 				<hgroup>
@@ -176,7 +174,7 @@ items = items
 					)
 				}
 			</div>
-			<Popover id="sources">
+			<Dialog id="sources">
 				<div class="flex items-center gap-2.5 mb-4">
 					<div class="p-1.5 bg-gr/10 md:rounded-lg border border-gr/20">
 						<LayersIcon class="w-4 h-4 text-gr" />
@@ -207,10 +205,10 @@ items = items
 						))
 					}
 				</ul>
-			</Popover>
+			</Dialog>
 			{
 				littleErrors.length > 0 && (
-					<Popover id="errors">
+					<Dialog id="errors">
 						<div class="flex items-center gap-2.5 mb-4">
 							<div class="p-1.5 bg-re/10 md:rounded-lg border border-re/20">
 								<BugIcon class="w-4 h-4 text-re" />
@@ -226,7 +224,7 @@ items = items
 								</div>
 							))}
 						</div>
-					</Popover>
+					</Dialog>
 				)
 			}
 		</header>

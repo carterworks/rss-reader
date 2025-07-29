@@ -1,10 +1,10 @@
 ---
 import { base } from "astro:config/client";
 import type Parser from "rss-parser";
+import Dialog from "./Dialog.astro";
 import ArchiveIcon from "./icons/ArchiveIcon.astro";
 import LinkIcon from "./icons/LinkIcon.astro";
 import SquareTopDownIcon from "./icons/SquareTopDownIcon.astro";
-import Popover from "./Popover.astro";
 
 interface Props {
 	item: Parser.Item;
@@ -28,11 +28,12 @@ const hasFavicon = faviconPath
 
 const shouldUsePopover =
 	item.content && item.content.toString().trim().length > 0;
+const popoverId = `rss-contents-${item.link?.replace(/[^\w-]/g, "-")}`;
 const linkAttrs = {
 	el: shouldUsePopover ? "button" : "a",
 	props: shouldUsePopover
 		? {
-				popovertarget: `rss-contents-${item.link}`,
+				onclick: `document.getElementById("${popoverId}").showModal()`,
 				ariaLabel: "Read article",
 			}
 		: {
@@ -163,39 +164,42 @@ const linkAttrs = {
 				}
 			</div>
 		</div>
-		<Popover id={`rss-contents-${item.link}`} class="space-y-4">
-			<hgroup>
-				<h3 class="text-base font-semibold leading-tight mb-2">
-					<a href={item.link} rel="noopener noreferrer" target="_blank">
-						{item.title}
-						<SquareTopDownIcon class="inline-block w-3 h-3" />
-					</a>
-				</h3>
-				<p class="flex items-center gap-1.5 text-xs text-tx-2">
-					{
-						Boolean(item.creator) && (
-							<>
-								<span class="font-medium text-pu">{item.creator}</span>
-								<span class="text-ui-3">•</span>
-							</>
-						)
-					}
-					{
-						Boolean(hostname) && (
-							<>
-								<span class="font-medium text-tx">{hostname}</span>
-								<span class="text-ui-3">•</span>
-							</>
-						)
-					}
-					<relative-time
-						datetime={new Date(
-							item.pubDate ?? item.isoDate ?? "",
-						).toISOString()}
-						class="text-tx-2"></relative-time>
-				</p>
-			</hgroup>
-			<article class="prose" set:html={item.content} />
-		</Popover>
+		{
+			shouldUsePopover && (
+				<>
+					<Dialog id={popoverId} class="space-y-4">
+						<hgroup>
+							<h3 class="text-base font-semibold leading-tight mb-2">
+								<a href={item.link} rel="noopener noreferrer" target="_blank">
+									{item.title}
+									<SquareTopDownIcon class="inline-block w-3 h-3" />
+								</a>
+							</h3>
+							<p class="flex items-center gap-1.5 text-xs text-tx-2">
+								{Boolean(item.creator) && (
+									<>
+										<span class="font-medium text-pu">{item.creator}</span>
+										<span class="text-ui-3">•</span>
+									</>
+								)}
+								{Boolean(hostname) && (
+									<>
+										<span class="font-medium text-tx">{hostname}</span>
+										<span class="text-ui-3">•</span>
+									</>
+								)}
+								<relative-time
+									datetime={new Date(
+										item.pubDate ?? item.isoDate ?? "",
+									).toISOString()}
+									class="text-tx-2"
+								/>
+							</p>
+						</hgroup>
+						<article class="prose" set:html={item.content} />
+					</Dialog>
+				</>
+			)
+		}
 	</div>
 </Element>
