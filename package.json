@@ -15,7 +15,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@github/relative-time-element": "^4.4.8",
-		"astro": "^5.11.2",
+		"astro": "^5.12.5",
 		"entities": "^6.0.1",
 		"feed": "^5.1.0",
 		"rss-parser": "^3.13.0"
