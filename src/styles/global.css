@@ -263,19 +263,14 @@
 	}
 
 	/* Dialog styling */
-	dialog:open {
+	dialog:open,
+	[popover]:popover-open {
 		@apply text-tx bg-bg opacity-100 scale-100;
 		transition:
 			opacity 0.1s,
 			transform 0.1s,
 			overlay 0.1s allow-discrete,
 			display 0.1s allow-discrete;
-	}
-	body:has(dialog:open) {
-		/* Keep the scrollbar visible, but disable scrolling */
-		position: fixed;
-		overflow-y: scroll;
-		width: 100%;
 	}
 	::backdrop {
 		@apply bg-bg/50 backdrop-blur-sm;
@@ -286,7 +281,8 @@
 			backdrop-filter 0.1s;
 	}
 	@starting-style {
-		dialog {
+		dialog:not(:open),
+		[popover]:not(:popover-open) {
 			@apply opacity-0 scale-0;
 		}
 		::backdrop {

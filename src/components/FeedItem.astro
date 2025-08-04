@@ -33,7 +33,7 @@ const linkAttrs = {
 	el: shouldUsePopover ? "button" : "a",
 	props: shouldUsePopover
 		? {
-				onclick: `document.getElementById("${popoverId}").showModal()`,
+				popovertarget: popoverId,
 				ariaLabel: "Read article",
 			}
 		: {
