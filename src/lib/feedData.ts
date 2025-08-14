@@ -11,6 +11,11 @@ export interface FeedDataResult {
 
 let cachedFeedPromise: Promise<FeedDataResult> | undefined;
 
+function removeStyleTags(html: string): string {
+	// Remove <style>...</style> blocks (case-insensitive, across newlines)
+	return html.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, "");
+}
+
 function getFeedUrls(): string[] {
 	const feedsEnv: string = import.meta.env.FEEDS ?? ("" satisfies string);
 	return feedsEnv
@@ -32,6 +37,7 @@ function grokFeedItem(item: Parser.Item): Parser.Item {
 		...item,
 		title:
 			item.title ?? `A post from ${item.creator ?? hostname ?? "somewhere"}`,
+		content: item.content ? removeStyleTags(item.content) : undefined,
 	};
 }
 
