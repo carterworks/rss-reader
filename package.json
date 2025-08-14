@@ -1,7 +1,7 @@
 {
 	"name": "rss-reader",
 	"private": true,
-	"version": "4.1.5",
+	"version": "4.1.6",
 	"main": "src/index.ts",
 	"type": "module",
 	"scripts": {
