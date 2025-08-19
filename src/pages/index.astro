@@ -264,7 +264,7 @@ items = items
 								<FeedItem
 									item={item}
 									class="motion-safe:animate-[fade-in_0.6s_ease-out_both]"
-									style={`animation-delay: ${index * 32}ms`}
+									style={`animation-delay: ${Math.log(index + 1) * 60}ms`}
 								/>
 							))}
 						</div>
