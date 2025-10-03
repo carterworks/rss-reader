@@ -1,13 +1,10 @@
 ---
+import Icon from "./Icon.astro";
+
 const props = Astro.props;
 ---
 
-<svg
-	xmlns="http://www.w3.org/2000/svg"
-	width="1em"
-	height="1em"
-	viewBox="0 0 24 24"
-	{...props}
+<Icon {...props} aria-label="Bug Icon"
 	><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ -->
 	<g fill="none"
 		><path
@@ -24,5 +21,5 @@ const props = Astro.props;
 			stroke-width="1.5"
 			d="M19 14h3M5 14H2M14.5 3.5L17 2M9.5 3.5L7 2m13.5 18l-2-.8m2-11.2l-2 .8M3.5 20l2-.8M3.5 8l2 .8M12 21.5V15"
 		></path></g
-	></svg
+	></Icon
 >
