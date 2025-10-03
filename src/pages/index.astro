@@ -14,7 +14,7 @@ import NewsIcon from "../components/icons/NewsIcon.astro";
 import { fetchFeedData } from "../lib/feedData";
 
 const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
-	? Number.parseInt(import.meta.env.RECENT_FEED_CUTOFF_TIME)
+	? Number.parseInt(import.meta.env.RECENT_FEED_CUTOFF_TIME, 10)
 	: 6 * 60 * 60 * 1000;
 
 const basePath = import.meta.env.BASE_URL satisfies string | undefined;
@@ -120,7 +120,7 @@ items = items
 				<div
 					class="p-1.5 bg-gradient-to-br from-bl rounded-lg to-pu border border-ui-3"
 				>
-					<NewsIcon class="w-5 h-5 text-white" />
+					<NewsIcon class="text-white" />
 				</div>
 				<hgroup>
 					<h1
@@ -134,10 +134,10 @@ items = items
 			<div class="flex flex-wrap gap-2 flex-2">
 				<button
 					popovertarget="sources"
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer"
+					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer text-xs"
 				>
-					<DocumentIcon class="w-3.5 h-3.5 text-bl" />
-					<span class="text-xs font-medium text-tx">
+					<DocumentIcon class="text-bl" />
+					<span class="font-medium text-tx">
 						{items?.length}<span class="hidden sm:inline ml-1">items</span>,
 						{sources.length}<span class="hidden sm:inline ml-1">sources</span>
 					</span>
@@ -145,31 +145,31 @@ items = items
 
 				<a
 					href="https://github.com/carterworks/rss-reader"
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200"
+					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200 text-xs"
 					title="View the source code on GitHub"
 				>
-					<CodeFileIcon class="w-3.5 h-3.5 text-tx-2" />
-					<span class="hidden sm:inline text-xs text-tx">GitHub</span>
+					<CodeFileIcon class="text-tx-2" />
+					<span class="hidden sm:inline text-tx">GitHub</span>
 				</a>
 
 				<a
 					href={`${basePath}/feed.xml`}
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200"
+					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 hover:bg-ui-2 rounded-lg border border-ui-2 hover:border-ui-3 transition-all duration-200 text-xs"
 					title="RSS/Atom Feed"
 				>
-					<BookmarkIcon class="w-3.5 h-3.5 text-or" />
-					<span class="hidden sm:inline text-xs text-tx">RSS Feed</span>
+					<BookmarkIcon class="text-or" />
+					<span class="hidden sm:inline text-tx">RSS Feed</span>
 				</a>
 
 				{
 					littleErrors.length > 0 && (
 						<button
-							class="flex cursor-pointer items-center gap-1.5 px-2.5 py-1.5 bg-re/10 hover:bg-re/20 rounded-lg border border-re/20 hover:border-re/30 transition-all duration-200"
+							class="flex cursor-pointer items-center gap-1.5 px-2.5 py-1.5 bg-re/10 hover:bg-re/20 rounded-lg border border-re/20 hover:border-re/30 transition-all duration-200 text-xs"
 							title="Show errors"
 							popovertarget="errors"
 						>
-							<BugIcon class="w-3.5 h-3.5 text-re" />
-							<span class="hidden sm:inline text-xs text-re">
+							<BugIcon class=" text-re" />
+							<span class="hidden sm:inline text-re">
 								{littleErrors.length} errors
 							</span>
 						</button>
@@ -177,11 +177,11 @@ items = items
 				}
 			</div>
 			<Dialog id="sources">
-				<div class="flex items-center gap-2.5 mb-4">
+				<div class="flex items-center gap-2.5 mb-4 text-lg">
 					<div class="p-1.5 bg-gr/10 md:rounded-lg border border-gr/20">
-						<LayersIcon class="w-4 h-4 text-gr" />
+						<LayersIcon class="text-gr" />
 					</div>
-					<h2 class="text-lg font-semibold text-tx">Sources</h2>
+					<h2 class="font-semibold text-tx">Sources</h2>
 				</div>
 				<ul role="list" class="space-y-2">
 					{
@@ -195,7 +195,7 @@ items = items
 										<img
 											src={`${base}/icon/${sourceFaviconMap.get(source)}.ico`}
 											alt={`Favicon for ${source}`}
-											class="w-4 h-4 dark:invert"
+											class="dark:invert"
 											loading="lazy"
 										/>
 									) : (
@@ -211,11 +211,11 @@ items = items
 			{
 				littleErrors.length > 0 && (
 					<Dialog id="errors">
-						<div class="flex items-center gap-2.5 mb-4">
+						<div class="flex items-center gap-2.5 mb-4 text-lg">
 							<div class="p-1.5 bg-re/10 md:rounded-lg border border-re/20">
-								<BugIcon class="w-4 h-4 text-re" />
+								<BugIcon class=" text-re" />
 							</div>
-							<h2 class="text-lg font-semibold text-tx">Feed Errors</h2>
+							<h2 class=" font-semibold text-tx">Feed Errors</h2>
 						</div>
 						<div class="space-y-2">
 							{littleErrors.map((error) => (
@@ -235,9 +235,9 @@ items = items
 			{
 				bigError && (
 					<div class="bg-re/10 border border-re/20 md:rounded-xl p-4 text-center">
-						<div class="flex items-center justify-center gap-2.5 mb-3">
-							<BugIcon class="w-5 h-5 text-re" />
-							<h2 class="text-lg font-semibold text-re">Error Loading Feeds</h2>
+						<div class="flex items-center justify-center gap-2.5 mb-3 text-lg ">
+							<BugIcon class="text-re" />
+							<h2 class="font-semibold text-re">Error Loading Feeds</h2>
 						</div>
 						<p class="text-tx mb-1.5">{bigError.message}</p>
 						<p class="text-tx-2 text-sm">Please try again later.</p>

@@ -1,13 +1,10 @@
 ---
+import Icon from "./Icon.astro";
+
 const props = Astro.props;
 ---
 
-<svg
-	xmlns="http://www.w3.org/2000/svg"
-	width="1em"
-	height="1em"
-	viewBox="0 0 24 24"
-	{...props}
+<Icon {...props} aria-label="Bookmark Icon"
 	><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ -->
 	<g fill="none" stroke="currentColor" stroke-width="1.5"
 		><path
@@ -16,5 +13,5 @@ const props = Astro.props;
 		></path><path
 			d="M17 2v6.808c0 .975 0 1.462-.13 1.753a1.5 1.5 0 0 1-1.724.848c-.31-.075-.695-.372-1.468-.967c-.436-.336-.654-.504-.881-.602a2 2 0 0 0-1.594 0c-.227.098-.445.266-.881.602c-.773.595-1.159.892-1.468.967a1.5 1.5 0 0 1-1.725-.848C7 10.27 7 9.783 7 8.808V2"
 		></path></g
-	></svg
+	></Icon
 >

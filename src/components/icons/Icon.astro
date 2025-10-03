@@ -1,0 +1,23 @@
+---
+const {
+	width,
+	height,
+	viewBox,
+	"aria-label": ariaLabel,
+	...props
+} = Astro.props;
+if (!ariaLabel) {
+	throw new Error("ariaLabel is required/");
+}
+---
+
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	width={width ?? "1lh"}
+	height={height ?? "1lh"}
+	viewBox={viewBox ?? "0 0 24 24"}
+	aria-label={ariaLabel}
+	{...props}
+>
+	<slot />
+</svg>
