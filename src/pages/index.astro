@@ -145,21 +145,26 @@ items = items
 					<p class="text-tx text-xs">aka how I pretend to be informed.</p>
 				</hgroup>
 			</div>
-			<div class="flex flex-wrap gap-2 flex-2">
-				<button
-					popovertarget="sources"
-					class="flex items-center gap-1.5 px-2.5 py-1.5 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer text-xs"
-				>
-					<DocumentIcon class="text-bl" />
-					<span class="font-medium text-tx">
-						<span class="hidden sm:inline">
-							{sources.length} sources, {items?.length ?? 0} items ({littleErrors.length} errors)
-						</span>
-						<span class="sm:hidden">
-							{sources.length}, {items?.length ?? 0}, {littleErrors.length}
-						</span>
-					</span>
-				</button>
+                        <div class="flex flex-wrap gap-2 flex-2">
+                                <button
+                                        popovertarget="sources"
+                                        class="flex items-start gap-1.5 px-2 py-1.5 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer text-left text-xs sm:text-sm sm:max-w-[18rem]"
+                                >
+                                        <DocumentIcon class="text-bl mt-0.5" />
+                                        <span class="flex-1">
+                                                <span class="hidden sm:flex sm:flex-col sm:gap-0.5 sm:leading-tight">
+                                                        <span class="font-medium text-tx">
+                                                                {sources.length} sources, {items?.length ?? 0} items
+                                                        </span>
+                                                        <span class="font-medium text-tx-2">
+                                                                ({littleErrors.length} errors)
+                                                        </span>
+                                                </span>
+                                                <span class="sm:hidden font-medium text-tx">
+                                                        {sources.length}, {items?.length ?? 0}, {littleErrors.length}
+                                                </span>
+                                        </span>
+                                </button>
 
 				<a
 					href="https://github.com/carterworks/rss-reader"
