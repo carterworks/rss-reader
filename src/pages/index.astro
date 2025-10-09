@@ -146,35 +146,36 @@ items = items
 				</hgroup>
 			</div>
                         <div class="flex flex-wrap gap-2 flex-2">
-                                <button
-                                        popovertarget="sources"
-                                        aria-label={`${sources.length} sources, ${items?.length ?? 0} items (${littleErrors.length} errors)`}
-                                        class="flex items-start gap-1.5 px-2 py-1.5 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer text-left text-xs sm:text-sm sm:max-w-[16rem]"
-                                >
-                                        <DocumentIcon class="text-bl mt-0.5" />
-                                        <span class="flex-1">
-                                                <span class="sr-only">
-                                                        {sources.length} sources, {items?.length ?? 0} items ({littleErrors.length} errors)
-                                                </span>
-                                                <span class="hidden sm:grid sm:grid-cols-3 sm:gap-3 sm:leading-tight">
-                                                        <span class="flex flex-col text-tx">
-                                                                <span class="text-[0.625rem] uppercase tracking-[0.18em] text-tx-2">Sources</span>
-                                                                <span class="text-sm">{sources.length}</span>
-                                                        </span>
-                                                        <span class="flex flex-col text-tx">
-                                                                <span class="text-[0.625rem] uppercase tracking-[0.18em] text-tx-2">Items</span>
-                                                                <span class="text-sm">{items?.length ?? 0}</span>
-                                                        </span>
-                                                        <span class="flex flex-col text-tx">
-                                                                <span class="text-[0.625rem] uppercase tracking-[0.18em] text-tx-2">Errors</span>
-                                                                <span class="text-sm">{littleErrors.length}</span>
-                                                        </span>
-                                                </span>
-                                                <span class="sm:hidden text-tx">
-                                                        {sources.length}, {items?.length ?? 0}, {littleErrors.length}
-                                                </span>
-                                        </span>
-                                </button>
+                               <button
+                                       popovertarget="sources"
+                                       aria-label={`${sources.length} sources, ${items?.length ?? 0} items (${littleErrors.length} errors)`}
+                                       class="flex items-center gap-2 px-2.5 py-1.5 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer text-left text-xs sm:text-sm sm:max-w-[18rem]"
+                               >
+                                       <DocumentIcon class="text-bl shrink-0" />
+                                       <span class="flex min-w-0 flex-1 flex-col gap-1 text-tx">
+                                               <span class="sr-only">
+                                                       {sources.length} sources, {items?.length ?? 0} items ({littleErrors.length} errors)
+                                               </span>
+                                               <span class="text-[0.625rem] uppercase tracking-[0.2em] text-tx-2">Sources overview</span>
+                                               <span class="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-1.5">
+                                                       <span class="inline-flex items-center gap-1 rounded-full bg-ui-1 px-1.5 py-0.5 text-[0.6875rem] leading-none">
+                                                               <span class="font-mono tabular-nums text-sm leading-none">{sources.length}</span>
+                                                               <span class="uppercase tracking-[0.18em] text-[0.5625rem] text-tx-2">sources</span>
+                                                       </span>
+                                                       <span class="inline-flex items-center gap-1 rounded-full bg-ui-1 px-1.5 py-0.5 text-[0.6875rem] leading-none">
+                                                               <span class="font-mono tabular-nums text-sm leading-none">{items?.length ?? 0}</span>
+                                                               <span class="uppercase tracking-[0.18em] text-[0.5625rem] text-tx-2">items</span>
+                                                       </span>
+                                                       <span class="inline-flex items-center gap-1 rounded-full bg-ui-1 px-1.5 py-0.5 text-[0.6875rem] leading-none">
+                                                               <span class="font-mono tabular-nums text-sm leading-none">{littleErrors.length}</span>
+                                                               <span class="uppercase tracking-[0.18em] text-[0.5625rem] text-tx-2">errors</span>
+                                                       </span>
+                                               </span>
+                                               <span class="sm:hidden text-tx">
+                                                       {sources.length}, {items?.length ?? 0}, {littleErrors.length}
+                                               </span>
+                                       </span>
+                               </button>
 
 				<a
 					href="https://github.com/carterworks/rss-reader"
