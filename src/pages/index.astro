@@ -97,16 +97,18 @@ items = items
 		<script>
 			// Prevent body scroll when popover is open
 			document.addEventListener("DOMContentLoaded", () => {
-				const errorsPopover = document.getElementById("errors");
-				if (errorsPopover) {
-					errorsPopover.addEventListener("toggle", (e: any) => {
+				const popovers = ["sources"]; // Extendable for future dialogs
+				popovers.forEach((id) => {
+					const popover = document.getElementById(id);
+					if (!popover) return;
+					popover.addEventListener("toggle", (e: any) => {
 						if (e.newState === "open") {
 							document.body.classList.add("popover-open");
 						} else {
 							document.body.classList.remove("popover-open");
 						}
 					});
-				}
+				});
 			});
 		</script>
 	</head>
@@ -138,8 +140,12 @@ items = items
 				>
 					<DocumentIcon class="text-bl" />
 					<span class="font-medium text-tx">
-						{items?.length}<span class="hidden sm:inline ml-1">items</span>,
-						{sources.length}<span class="hidden sm:inline ml-1">sources</span>
+						<span class="hidden sm:inline">
+							{sources.length} sources, {items?.length ?? 0} items ({littleErrors.length} errors)
+						</span>
+						<span class="sm:hidden">
+							{sources.length}, {items?.length ?? 0}, {littleErrors.length}
+						</span>
 					</span>
 				</button>
 
@@ -161,20 +167,6 @@ items = items
 					<span class="hidden sm:inline text-tx">RSS Feed</span>
 				</a>
 
-				{
-					littleErrors.length > 0 && (
-						<button
-							class="flex cursor-pointer items-center gap-1.5 px-2.5 py-1.5 bg-re/10 hover:bg-re/20 rounded-lg border border-re/20 hover:border-re/30 transition-all duration-200 text-xs"
-							title="Show errors"
-							popovertarget="errors"
-						>
-							<BugIcon class=" text-re" />
-							<span class="hidden sm:inline text-re">
-								{littleErrors.length} errors
-							</span>
-						</button>
-					)
-				}
 			</div>
 			<Dialog id="sources">
 				<div class="flex items-center gap-2.5 mb-4 text-lg">
@@ -183,6 +175,9 @@ items = items
 					</div>
 					<h2 class="font-semibold text-tx">Sources</h2>
 				</div>
+				<p class="text-xs text-tx-2 mb-4">
+					{sources.length} sources, {items?.length ?? 0} items, {littleErrors.length} errors
+				</p>
 				<ul role="list" class="space-y-2">
 					{
 						sources.map((source) => (
@@ -207,28 +202,28 @@ items = items
 						))
 					}
 				</ul>
-			</Dialog>
-			{
-				littleErrors.length > 0 && (
-					<Dialog id="errors">
-						<div class="flex items-center gap-2.5 mb-4 text-lg">
-							<div class="p-1.5 bg-re/10 md:rounded-lg border border-re/20">
-								<BugIcon class=" text-re" />
-							</div>
-							<h2 class=" font-semibold text-tx">Feed Errors</h2>
-						</div>
-						<div class="space-y-2">
-							{littleErrors.map((error) => (
-								<div class="bg-bg-2 border border-ui-2 md:rounded-lg p-3 hover:bg-ui/50 transition-colors">
-									<div class="text-xs text-tx whitespace-pre-wrap break-words font-monospace-code">
-										{error.message}
-									</div>
+				{
+					littleErrors.length > 0 && (
+						<div class="mt-6">
+							<div class="flex items-center gap-2.5 mb-3 text-base">
+								<div class="p-1.5 bg-re/10 md:rounded-lg border border-re/20">
+									<BugIcon class=" text-re" />
 								</div>
-							))}
+								<h3 class="font-semibold text-re">Feed Errors</h3>
+							</div>
+							<div class="space-y-2">
+								{littleErrors.map((error) => (
+									<div class="bg-bg-2 border border-ui-2 md:rounded-lg p-3 hover:bg-ui/50 transition-colors">
+										<div class="text-xs text-tx whitespace-pre-wrap break-words font-monospace-code">
+											{error.message}
+										</div>
+									</div>
+								))}
+							</div>
 						</div>
-					</Dialog>
-				)
-			}
+					)
+				}
+			</Dialog>
 		</header>
 
 		<main class="space-y-4">
