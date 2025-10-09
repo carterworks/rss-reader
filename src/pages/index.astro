@@ -153,23 +153,9 @@ items = items
                                >
                                        <DocumentIcon class="text-bl shrink-0" />
                                        <span class="flex min-w-0 flex-1 flex-col gap-1 text-tx">
-                                               <span class="sr-only">
-                                                       {sources.length} sources, {items?.length ?? 0} items ({littleErrors.length} errors)
-                                               </span>
                                                <span class="text-[0.625rem] uppercase tracking-[0.2em] text-tx-2">Sources overview</span>
-                                               <span class="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-1.5">
-                                                       <span class="inline-flex items-center gap-1 rounded-full bg-ui-1 px-1.5 py-0.5 text-[0.6875rem] leading-none">
-                                                               <span class="font-mono tabular-nums text-sm leading-none">{sources.length}</span>
-                                                               <span class="uppercase tracking-[0.18em] text-[0.5625rem] text-tx-2">sources</span>
-                                                       </span>
-                                                       <span class="inline-flex items-center gap-1 rounded-full bg-ui-1 px-1.5 py-0.5 text-[0.6875rem] leading-none">
-                                                               <span class="font-mono tabular-nums text-sm leading-none">{items?.length ?? 0}</span>
-                                                               <span class="uppercase tracking-[0.18em] text-[0.5625rem] text-tx-2">items</span>
-                                                       </span>
-                                                       <span class="inline-flex items-center gap-1 rounded-full bg-ui-1 px-1.5 py-0.5 text-[0.6875rem] leading-none">
-                                                               <span class="font-mono tabular-nums text-sm leading-none">{littleErrors.length}</span>
-                                                               <span class="uppercase tracking-[0.18em] text-[0.5625rem] text-tx-2">errors</span>
-                                                       </span>
+                                               <span class="hidden sm:block text-sm sm:text-[0.8125rem] text-tx sm:leading-5 sm:whitespace-nowrap">
+                                                       {sources.length} sources, {items?.length ?? 0} items ({littleErrors.length} errors)
                                                </span>
                                                <span class="sm:hidden text-tx">
                                                        {sources.length}, {items?.length ?? 0}, {littleErrors.length}
