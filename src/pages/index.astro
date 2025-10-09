@@ -11,6 +11,7 @@ import BugIcon from "../components/icons/BugIcon.astro";
 import LayersIcon from "../components/icons/LayersIcon.astro";
 import LinkIcon from "../components/icons/LinkIcon.astro";
 import NewsIcon from "../components/icons/NewsIcon.astro";
+import type { FeedSourceResult } from "../lib/feedData";
 import { fetchFeedData } from "../lib/feedData";
 
 const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
@@ -22,24 +23,28 @@ const basePath = import.meta.env.BASE_URL satisfies string | undefined;
 type FeedItemType = Parser.Item & { updated?: string; isoDate?: string };
 
 async function getAllFeedItems(): Promise<{
-	sources: string[];
+	sources: FeedSourceResult[];
 	items: FeedItemType[];
 	errors: Error[];
 }> {
 	const data = await fetchFeedData();
 	return {
 		sources: data.sources,
-		items: data.feeds.flatMap((f) => f.items) as FeedItemType[],
+		items: data.sources.flatMap(
+			(source) => source.feed?.items ?? [],
+		) as FeedItemType[],
 		errors: data.errors,
 	};
 }
 let items: FeedItemType[] | undefined;
 let bigError: Error | undefined;
-let sources: string[] = [];
+let sources: FeedSourceResult[] = [];
 let littleErrors: Error[] = [];
 try {
 	const data = await getAllFeedItems();
-	littleErrors = data.errors;
+	littleErrors = data.sources.flatMap((source) =>
+		source.error ? [source.error] : [],
+	);
 	items = data.items;
 	sources = data.sources;
 } catch (err) {
@@ -50,15 +55,22 @@ try {
 const updateTime = new Date();
 const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
 const sourceFaviconMap = new Map<string, string>();
+function getSourceErrorMessage(source: FeedSourceResult): string | undefined {
+	if (!source.error) return undefined;
+	const prefix = `[${source.url}] `;
+	return source.error.message.startsWith(prefix)
+		? source.error.message.slice(prefix.length)
+		: source.error.message;
+}
 await Promise.allSettled(
 	sources.map(async (source) => {
-		const hostname = source ? new URL(source).hostname : undefined;
+		const hostname = source.url ? new URL(source.url).hostname : undefined;
 		const faviconPath = hostname ? `${base}/icon/${hostname}.ico` : undefined;
 		const hasFavicon = faviconPath
 			? await fetch(new URL(faviconPath, Astro.url)).then((r) => r.ok)
 			: false;
 		if (hasFavicon && hostname) {
-			sourceFaviconMap.set(source, hostname);
+			sourceFaviconMap.set(source.url, hostname);
 		}
 	}),
 );
@@ -180,50 +192,37 @@ items = items
 				</p>
 				<ul role="list" class="space-y-2">
 					{
-						sources.map((source) => (
-							<li class="bg-bg-2 border border-ui-2 md:rounded-lg p-3 hover:bg-ui/50 transition-colors">
-								<a
-									href={source}
-									class="text-xs text-tx whitespace-pre-wrap break-words font-monospace-code flex items-center gap-2"
-								>
-									{sourceFaviconMap.has(source) ? (
-										<img
-											src={`${base}/icon/${sourceFaviconMap.get(source)}.ico`}
-											alt={`Favicon for ${source}`}
-											class="dark:invert"
-											loading="lazy"
-										/>
-									) : (
-										<LinkIcon title="No favicon" class="w-3 h-3 text-tx-2" />
-									)}
-									<span>{source}</span>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-				{
-					littleErrors.length > 0 && (
-						<div class="mt-6">
-							<div class="flex items-center gap-2.5 mb-3 text-base">
-								<div class="p-1.5 bg-re/10 md:rounded-lg border border-re/20">
-									<BugIcon class=" text-re" />
-								</div>
-								<h3 class="font-semibold text-re">Feed Errors</h3>
-							</div>
-							<div class="space-y-2">
-								{littleErrors.map((error) => (
-									<div class="bg-bg-2 border border-ui-2 md:rounded-lg p-3 hover:bg-ui/50 transition-colors">
-										<div class="text-xs text-tx whitespace-pre-wrap break-words font-monospace-code">
-											{error.message}
-										</div>
-									</div>
-								))}
-							</div>
-						</div>
-					)
-				}
-			</Dialog>
+                                                sources.map((source) => (
+                                                        <li class="bg-bg-2 border border-ui-2 md:rounded-lg p-3 hover:bg-ui/50 transition-colors space-y-2">
+                                                                <a
+                                                                        href={source.url}
+                                                                        class="text-xs text-tx whitespace-pre-wrap break-words font-monospace-code flex items-center gap-2"
+                                                                >
+                                                                        {sourceFaviconMap.has(source.url) ? (
+                                                                                <img
+                                                                                        src={`${base}/icon/${sourceFaviconMap.get(source.url)}.ico`}
+                                                                                        alt={`Favicon for ${source.url}`}
+                                                                                        class="dark:invert"
+                                                                                        loading="lazy"
+                                                                                />
+                                                                        ) : (
+                                                                                <LinkIcon title="No favicon" class="w-3 h-3 text-tx-2" />
+                                                                        )}
+                                                                        <span>{source.url}</span>
+                                                                </a>
+                                                                {source.error && (
+                                                                        <div class="flex items-start gap-2 rounded-md border border-re/40 bg-re/10 p-2 text-xs text-re">
+                                                                                <BugIcon class="w-3.5 h-3.5 mt-0.5" />
+                                                                                <span class="whitespace-pre-wrap break-words font-monospace-code text-left">
+                                                                                        {getSourceErrorMessage(source)}
+                                                                                </span>
+                                                                        </div>
+                                                                )}
+                                                        </li>
+                                                ))
+                                        }
+                                </ul>
+                        </Dialog>
 		</header>
 
 		<main class="space-y-4">
