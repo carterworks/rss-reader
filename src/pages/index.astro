@@ -81,6 +81,12 @@ items = items
 			new Date(b.pubDate ?? b.isoDate ?? b.updated ?? "").getTime() -
 			new Date(a.pubDate ?? a.isoDate ?? a.updated ?? "").getTime(),
 	);
+
+const sourceStats = [
+	{ label: "Sources", value: sources.length },
+	{ label: "Items", value: items?.length ?? 0 },
+	{ label: "Errors", value: littleErrors.length },
+];
 ---
 
 <!doctype html>
@@ -149,30 +155,27 @@ items = items
                                <button
                                        popovertarget="sources"
                                        aria-label={`${sources.length} sources, ${items?.length ?? 0} items (${littleErrors.length} errors)`}
-                                       class="flex items-center gap-3 px-2.5 py-2 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer text-left text-xs sm:text-sm"
+                                       class="flex w-full sm:w-auto items-start gap-2 px-2 py-1.5 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer text-left text-xs sm:text-sm hover:bg-ui-2 transition-colors"
                                >
                                        <span class="sr-only">Sources overview</span>
-                                       <div class="flex items-center gap-2 sm:hidden">
+                                       <div class="flex items-start gap-2 sm:hidden text-left">
                                                <DocumentIcon class="text-bl shrink-0" />
                                                <div class="flex flex-col text-tx">
                                                        <span class="text-[0.625rem] uppercase tracking-[0.2em] text-tx-2">Sources overview</span>
                                                        <span>{sources.length}, {items?.length ?? 0}, {littleErrors.length}</span>
                                                </div>
                                        </div>
-                                       <div class="hidden sm:flex items-center gap-3 text-tx">
-                                               <div class="pr-3 border-r border-ui-3 flex items-center">
-                                                       <DocumentIcon class="text-bl" />
-                                               </div>
+                                       <div class="hidden sm:flex items-start gap-3 text-left">
+                                               <DocumentIcon class="text-bl shrink-0" />
                                                <div class="flex flex-col gap-1">
-                                                       <div class="flex divide-x divide-ui-3 text-[0.625rem] tracking-[0.2em] uppercase text-tx-2">
-                                                               <span class="px-3 text-center flex-1">Sources</span>
-                                                               <span class="px-3 text-center flex-1">Items</span>
-                                                               <span class="px-3 text-center flex-1">Errors</span>
-                                                       </div>
-                                                       <div class="flex divide-x divide-ui-3 text-lg">
-                                                               <span class="px-3 text-center font-semibold text-tx flex-1">{sources.length}</span>
-                                                               <span class="px-3 text-center font-semibold text-tx flex-1">{items?.length ?? 0}</span>
-                                                               <span class="px-3 text-center font-semibold text-tx flex-1">{littleErrors.length}</span>
+                                                       <span class="text-[0.625rem] uppercase tracking-[0.2em] text-tx-2">Sources overview</span>
+                                                       <div class="flex gap-4 text-left">
+                                                               {sourceStats.map((stat) => (
+                                                                       <div class="flex flex-col gap-0.5 pr-4 last:pr-0 border-r border-ui-3 last:border-none">
+                                                                               <span class="text-[0.625rem] uppercase tracking-[0.2em] text-tx-2">{stat.label}</span>
+                                                                               <span class="text-base text-tx leading-tight">{stat.value}</span>
+                                                                       </div>
+                                                               ))}
                                                        </div>
                                                </div>
                                        </div>
