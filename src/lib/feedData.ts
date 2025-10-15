@@ -1,8 +1,17 @@
 import Parser from "rss-parser";
 
+export interface FeedSourceResult {
+	/** The URL of the feed */
+	url: string;
+	/** Successfully parsed feed, if available */
+	feed?: Parser.Output<unknown>;
+	/** Any error encountered while fetching/parsing this feed */
+	error?: Error;
+}
+
 export interface FeedDataResult {
 	/** The URLs of the feeds that were fetched */
-	sources: string[];
+	sources: FeedSourceResult[];
 	/** Successfully parsed feeds */
 	feeds: Parser.Output<unknown>[];
 	/** Any errors encountered while fetching/parsing feeds */
@@ -67,13 +76,23 @@ async function getFeed(): Promise<FeedDataResult> {
 	});
 
 	const results = await Promise.allSettled(feedPromises);
-	const feeds = results.filter(isFulfilled).map((r) => r.value);
-	const errors = results
-		.filter((r): r is PromiseRejectedResult => r.status === "rejected")
-		.map((r) => r.reason as Error);
+	const feeds: Parser.Output<unknown>[] = [];
+	const errors: Error[] = [];
+	const sources: FeedSourceResult[] = results.map((result, index) => {
+		const url = feedUrls[index];
+		if (isFulfilled(result)) {
+			const feed = result.value;
+			feeds.push(feed);
+			return { url, feed } satisfies FeedSourceResult;
+		}
+
+		const error = result.reason as Error;
+		errors.push(error);
+		return { url, error } satisfies FeedSourceResult;
+	});
 
 	return {
-		sources: feedUrls,
+		sources,
 		feeds,
 		errors,
 	} satisfies FeedDataResult;
