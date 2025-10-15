@@ -273,15 +273,15 @@ const sourceStats = [
 							<div class="flex-1 h-px bg-gradient-to-r from-transparent via-ui-2 to-transparent" />
 						</div>
 
-						<div class="space-y-2">
-							{items?.map((item, index) => (
-								<FeedItem
-									item={item}
-									class="motion-safe:animate-[fade-in_0.6s_ease-out_both]"
-									style={`animation-delay: ${Math.log(index + 1) * 60}ms`}
-								/>
+					<div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+						{items?.map((item, index) => (
+							<FeedItem
+								item={item}
+								class="h-full motion-safe:animate-[fade-in_0.6s_ease-out_both]"
+								style={`animation-delay: ${Math.log(index + 1) * 60}ms`}
+							/>
 							))}
-						</div>
+					</div>
 
 						<div class="flex items-center gap-3 px-3 py-2 bg-bg-2/50 backdrop-blur-sm md:rounded-lg border border-ui-2 mt-6">
 							<div class="flex-1 h-px bg-gradient-to-r from-transparent via-ui-2 to-transparent" />
