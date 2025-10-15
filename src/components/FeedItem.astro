@@ -135,24 +135,29 @@ const linkProps = linkAttrs.props;
 							{item.contentSnippet ?? item.content}
 						</p>
 					)}
-					<div class="flex items-center gap-1.5 text-xs text-tx-2">
-						{Boolean(item.creator) && (
-							<>
-								<span class="font-medium text-pu">{item.creator}</span>
-								<span class="text-ui-3">•</span>
-							</>
-						)}
-						{Boolean(hostname) && (
-							<>
-								<span class="font-medium text-tx">{hostname}</span>
-								<span class="text-ui-3">•</span>
-							</>
-						)}
-						<relative-time
-							datetime={new Date(
-								item.pubDate ?? item.isoDate ?? "",
-							).toISOString()}
-							class="text-tx-2"></relative-time>
+                                        <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-tx-2 leading-snug">
+                                                {Boolean(item.creator) && (
+                                                        <>
+                                                                <span class="font-medium text-pu break-words">
+                                                                        {item.creator}
+                                                                </span>
+                                                                <span class="text-ui-3 flex-shrink-0">•</span>
+                                                        </>
+                                                )}
+                                                {Boolean(hostname) && (
+                                                        <>
+                                                                <span class="font-medium text-tx break-words">
+                                                                        {hostname}
+                                                                </span>
+                                                                <span class="text-ui-3 flex-shrink-0">•</span>
+                                                        </>
+                                                )}
+                                                <relative-time
+                                                        datetime={new Date(
+                                                                item.pubDate ?? item.isoDate ?? "",
+                                                        ).toISOString()}
+                                                        class="text-tx-2 whitespace-nowrap"
+                                                ></relative-time>
 					</div>
 				</div>
 			</div>
