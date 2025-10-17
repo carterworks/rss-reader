@@ -293,6 +293,11 @@ async function resolveLinkFromFeeds(encoded: string): Promise<string> {
 
 	return match;
 }
+const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
+	? Number.parseInt(import.meta.env.RECENT_FEED_CUTOFF_TIME, 10)
+	: 6 * 60 * 60 * 1000;
+const updateTime = new Date();
+const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
 
 export const getStaticPaths: import("astro").GetStaticPaths = async () => {
 	const { feeds } = await fetchFeedData();
@@ -300,6 +305,7 @@ export const getStaticPaths: import("astro").GetStaticPaths = async () => {
 		new Set(
 			feeds
 				.flatMap((feed) => feed.items)
+				.filter((item) => item.pubDate && new Date(item.pubDate) > cutoffTime)
 				.map((item) => item.link)
 				.filter((link): link is string => typeof link === "string"),
 		),

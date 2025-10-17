@@ -1,11 +1,18 @@
 import { fetchFeedData } from "../../lib/feedData";
 
+const RECENT_FEED_CUTOFF_TIME = import.meta.env.RECENT_FEED_CUTOFF_TIME
+	? Number.parseInt(import.meta.env.RECENT_FEED_CUTOFF_TIME, 10)
+	: 6 * 60 * 60 * 1000;
+const updateTime = new Date();
+const cutoffTime = new Date(updateTime.getTime() - RECENT_FEED_CUTOFF_TIME);
+
 export const getStaticPaths: import("astro").GetStaticPaths = async () => {
 	const { feeds } = await fetchFeedData();
 	const itemLinks = Array.from(
 		new Set(
 			feeds
 				.flatMap((f) => f.items)
+				.filter((item) => item.pubDate && new Date(item.pubDate) > cutoffTime)
 				.filter((i) => Boolean(i.link))
 				.map((i) => new URL(i.link as string).hostname),
 		),
