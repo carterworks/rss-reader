@@ -6,6 +6,7 @@ import Dialog from "./Dialog.astro";
 import ArchiveIcon from "./icons/ArchiveIcon.astro";
 import LinkIcon from "./icons/LinkIcon.astro";
 import SquareTopDownIcon from "./icons/SquareTopDownIcon.astro";
+import { Image, inferRemoteSize } from "astro:assets";
 
 interface Props {
 	item: Parser.Item;
@@ -29,9 +30,26 @@ const hasFavicon = faviconPath
 
 const encodedLink = item.link ? encodeItemLink(item.link) : undefined;
 const ogImagePath = encodedLink ? `${base}/og/${encodedLink}.jpg` : undefined;
-const hasOgImage = ogImagePath
-	? await fetch(new URL(ogImagePath, Astro.url)).then((r) => r.ok)
-	: false;
+let ogImageDimensions: Awaited<ReturnType<typeof inferRemoteSize>> | undefined;
+if (ogImagePath) {
+	try {
+		const absoluteOgUrl = new URL(ogImagePath, Astro.url).toString();
+		ogImageDimensions = await inferRemoteSize(absoluteOgUrl);
+	} catch (error) {
+		console.warn(
+			`[feed-item] Failed to infer og image size for '${ogImagePath}':`,
+			error,
+		);
+	}
+}
+const ogImageAttrs =
+	ogImagePath && ogImageDimensions?.width && ogImageDimensions?.height
+		? {
+				src: ogImagePath,
+				width: ogImageDimensions.width,
+				height: ogImageDimensions.height,
+			}
+		: undefined;
 
 const shouldUsePopover =
 	item.content && item.content.toString().trim().length > 0;
@@ -95,10 +113,12 @@ const linkProps = linkAttrs.props;
 				class="relative overflow-hidden border border-ui-2/60 aspect-[16/9] bg-bg-2/40"
 			>
 				{
-					hasOgImage && ogImagePath ? (
+					ogImageAttrs ? (
 						<>
-							<img
-								src={ogImagePath}
+							<Image
+								src={ogImageAttrs.src}
+								width={ogImageAttrs.width}
+								height={ogImageAttrs.height}
 								alt={`Preview image for ${item.title ?? item.link ?? "feed item"}`}
 								class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
 								loading="lazy"
