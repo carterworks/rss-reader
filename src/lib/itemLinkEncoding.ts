@@ -1,9 +1,28 @@
-import { Buffer } from "node:buffer";
+import { createHash } from "node:crypto";
+import type Parser from "rss-parser";
+
+const HASH_ALGORITHM = "sha256";
 
 export function encodeItemLink(link: string): string {
-	return Buffer.from(link).toString("base64url");
+	return createHash(HASH_ALGORITHM).update(link).digest("base64url");
 }
 
-export function decodeItemLink(encoded: string): string {
-	return Buffer.from(encoded, "base64url").toString("utf8");
+export function findLinkByEncodedValue(
+	encoded: string,
+	feeds: Parser.Output<unknown>[],
+): string | undefined {
+	for (const feed of feeds) {
+		for (const item of feed.items) {
+			if (!item.link) {
+				continue;
+			}
+
+			const candidate = encodeItemLink(item.link);
+			if (candidate === encoded) {
+				return item.link;
+			}
+		}
+	}
+
+	return undefined;
 }

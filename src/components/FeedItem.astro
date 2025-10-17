@@ -28,8 +28,10 @@ const hasFavicon = faviconPath
 	? await fetch(new URL(faviconPath, Astro.url)).then((r) => r.ok)
 	: false;
 
-const encodedLink = item.link ? encodeItemLink(item.link) : undefined;
-const ogImagePath = encodedLink ? `${base}/og/${encodedLink}.jpg` : undefined;
+const encodedLinkToken = item.link ? encodeItemLink(item.link) : undefined;
+const ogImagePath = encodedLinkToken
+	? `${base}/og/${encodedLinkToken}.jpg`
+	: undefined;
 let ogImageDimensions: Awaited<ReturnType<typeof inferRemoteSize>> | undefined;
 if (ogImagePath) {
 	try {

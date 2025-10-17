@@ -6,7 +6,10 @@ import {
 } from "astro:assets";
 import { imageMetadata } from "astro/assets/utils";
 import { fetchFeedData } from "../../lib/feedData";
-import { decodeItemLink, encodeItemLink } from "../../lib/itemLinkEncoding";
+import {
+	encodeItemLink,
+	findLinkByEncodedValue,
+} from "../../lib/itemLinkEncoding";
 
 const SUPPORTED_META_PROPERTIES = new Set([
 	"og:image",
@@ -280,6 +283,17 @@ async function fetchOgImage(link: string): Promise<Response> {
 	}
 }
 
+async function resolveLinkFromFeeds(encoded: string): Promise<string> {
+	const { feeds } = await fetchFeedData();
+	const match = findLinkByEncodedValue(encoded, feeds);
+
+	if (!match) {
+		throw new Error(`No feed item found for encoded value '${encoded}'`);
+	}
+
+	return match;
+}
+
 export const getStaticPaths: import("astro").GetStaticPaths = async () => {
 	const { feeds } = await fetchFeedData();
 	const itemLinks = Array.from(
@@ -295,23 +309,30 @@ export const getStaticPaths: import("astro").GetStaticPaths = async () => {
 		params: {
 			encoded: encodeItemLink(link),
 		},
+		props: {
+			link,
+		},
 	}));
 };
 
-export const GET: import("astro").APIRoute = async ({ params }) => {
-	const encoded = Array.isArray(params.encoded)
-		? params.encoded[0]
+export const GET: import("astro").APIRoute = async ({ params, props }) => {
+	const rawEncoded = Array.isArray(params.encoded)
+		? params.encoded.join("/")
 		: (params.encoded ?? "");
+	const encoded = rawEncoded.trim();
 
 	if (!encoded) {
 		return new Response(null, { status: 400 });
 	}
 
 	try {
-		const link = decodeItemLink(encoded);
+		const link =
+			typeof props?.link === "string"
+				? props.link
+				: await resolveLinkFromFeeds(encoded);
 		return await fetchOgImage(link);
 	} catch (error) {
-		console.error(`[og] Failed to decode path segment '${encoded}':`, error);
-		return new Response(null, { status: 400 });
+		console.error(`[og] Failed to resolve link for '${encoded}':`, error);
+		return new Response(null, { status: 404 });
 	}
 };
