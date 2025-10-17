@@ -174,7 +174,7 @@ const sourceStats = [
 				<button
 					popovertarget="sources"
 					aria-label={`${sources.length} sources, ${items?.length ?? 0} items (${littleErrors.length} errors)`}
-					class="flex w-full sm:w-auto items-start gap-2 px-2 py-1.5 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer text-left text-xs sm:text-sm hover:bg-ui-2 transition-colors"
+					class="flex items-start gap-2 px-2 py-1.5 bg-bg-2 rounded-lg border border-ui-2 cursor-pointer text-left text-xs sm:text-sm hover:bg-ui-2 transition-colors"
 				>
 					<div class="flex items-start gap-2 sm:hidden text-left">
 						<DocumentIcon class="text-bl shrink-0 mt-0.5" />
@@ -218,7 +218,7 @@ const sourceStats = [
 					title="View the source code on GitHub"
 				>
 					<CodeFileIcon class="text-tx-2" />
-					<span class="hidden sm:inline text-tx">GitHub</span>
+					<span class="text-tx">GitHub</span>
 				</a>
 
 				<a
@@ -227,7 +227,7 @@ const sourceStats = [
 					title="RSS/Atom Feed"
 				>
 					<BookmarkIcon class="text-or" />
-					<span class="hidden sm:inline text-tx">RSS Feed</span>
+					<span class="text-tx">RSS Feed</span>
 				</a>
 			</div>
 			<Dialog id="sources">
