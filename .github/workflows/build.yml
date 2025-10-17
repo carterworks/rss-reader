@@ -11,8 +11,6 @@ on:
   schedule:
     - cron: "0 */2 * * *" # At minute 0 past every 2nd hour.
 
-
-
 # Allow this job to clone the repo and create a page deployment
 permissions:
   contents: read

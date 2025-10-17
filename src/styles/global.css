@@ -21,8 +21,8 @@
 		ui-monospace, "Cascadia Code", "Source Code Pro", menlo, consolas,
 		"DejaVu Sans Mono", monospace;
 	--font-industrial:
-		bahnschrift, "DIN Alternate", "Franklin Gothic Medium", "Nimbus Sans Narrow",
-		sans-serif-condensed, sans-serif;
+		bahnschrift, "DIN Alternate", "Franklin Gothic Medium",
+		"Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
 	--font-rounded-sans:
 		ui-rounded, "Hiragino Maru Gothic ProN", quicksand, comfortaa, manjari,
 		"Arial Rounded MT", "Arial Rounded MT Bold", calibri, source-sans-pro,
@@ -181,11 +181,11 @@
 	--color-magenta-900: #39172b;
 	--color-magenta-950: #24131d;
 
-	/* 
+	/*
  * Base color
- * Flexoki uses warm monochromatic base values that blend the black value with 
+ * Flexoki uses warm monochromatic base values that blend the black value with
  * the paper value. 8 values are used in light and dark mode:
- * 
+ *
  * - 3 text values: normal, muted, faint
  * - 3 interface values: normal, hover, active
  * - 2 background values: primary, secondary
@@ -448,6 +448,16 @@
 		opacity: 1;
 		transform: translateY(0);
 	}
+}
+
+@utility grid-cols-with-gutter-and-popout {
+	grid-template-columns:
+		[full-width-start] 1fr
+		[popout-start] 1fr
+		[content-start] 65ch
+		[content-end] 1fr
+		[popout-end] 1fr
+		[full-width-end];
 }
 
 /* Remove all animations and transitions for people that prefer not to see them */
