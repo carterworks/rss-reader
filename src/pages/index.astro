@@ -309,8 +309,8 @@ const sourceStats = [
 							{items?.map((item, index) => (
 								<FeedItem
 									item={item}
-									class="h-full motion-safe:animate-[fade-in_0.6s_ease-out_both]"
-									style={`animation-delay: ${Math.log(index + 1) * 60}ms`}
+									class="h-full motion-safe:animate-[fade-in_150ms_var(--ease-out-quad)_calc(min(log(var(--index))*180ms,2s))_both]"
+									style={{ "--index": index + 1 }}
 								/>
 							))}
 						</div>
