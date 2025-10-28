@@ -309,7 +309,7 @@ const sourceStats = [
 							{items?.map((item, index) => (
 								<FeedItem
 									item={item}
-									class="h-full motion-safe:animate-[fade-in_150ms_var(--ease-out-quad)_calc(min(log(var(--index))*180ms,2s))_both]"
+									class="h-full motion-safe:animate-[fade-in_150ms_var(--ease-out-quad)_min(calc(var(--index)*20ms),750ms)_both]"
 									style={{ "--index": index + 1 }}
 								/>
 							))}
